@@ -869,7 +869,7 @@ fn test_noise_budget() -> Result<()> {
                 Ok(sm) => sm.value()?,
                 Err(_) => {
                     debug!(" FAILURE creating the modulus-------|------|------|---------|------|");
-                    continue
+                    continue;
                 }
             };
             print!("{:>11} |{:>5} |", plain_modulus, bits_size);
@@ -937,7 +937,7 @@ fn test_noise_budget() -> Result<()> {
                         mul_round += 1;
                     }
                     if mul_noise_budget <= 0 && mul_plain_noise_budget <= 0 {
-                        break
+                        break;
                     }
                 }
             }
@@ -1052,7 +1052,7 @@ fn test_mod_switch_to_next() -> Result<()> {
                     let pt = decryptor.decrypt(&ct)?;
                     let recovered = batch_encoder.decode(&pt)?;
                     assert_eq!(&vector, &(recovered));
-                    break
+                    break;
                 } else {
                     ct = result;
                 }

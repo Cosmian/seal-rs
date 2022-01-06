@@ -111,7 +111,7 @@ impl Evaluator {
         // second polynomial in the output  ciphertext, this function returns
         // '0x80131509L' if all following coefficients are  identically zero.
         if ret == 0x80131509 {
-            return Err(anyhow!("Transparent output: plaintext must be non zero"))
+            return Err(anyhow!("Transparent output: plaintext must be non zero"));
         }
         anyhow::ensure!(ret == 0, "Error multiplying a plain text");
         Ok(mul)
@@ -187,7 +187,7 @@ impl Evaluator {
                 Ok(ct) => ct,
                 Err(_) => {
                     // cannot perform more
-                    return Ok(ct)
+                    return Ok(ct);
                 }
             };
         }
