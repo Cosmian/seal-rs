@@ -1,0 +1,17 @@
+[package]
+name = "rust-seal"
+version = "0.1.0"
+authors = ["Bruno Grieder <bruno.grieder@cosmian.com>"]
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+anyhow = { package = "eyre", version = "0.6.0" }
+
+[dev-dependencies]
+rand = "0.8"
+tracing = "0.1"
+
+[build-dependencies]
+cc = { version = "1.0", features = ["parallel"] }
+bindgen = "0.59"
