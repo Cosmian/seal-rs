@@ -151,15 +151,25 @@ impl Params {
     ///
     ///    For example, if poly_modulus_degree is 4096, the coeff_modulus could
     /// consist    of three 36-bit primes (108 bits).
-    ///
+    pub fn set_coeff_modulus(&self, mut primes: Vec<*mut c_void>) -> Result<()> {
+       // set the coeff modulus
+        let ret =
+            unsafe { EncParams_SetCoeffModulus(self.ptr, primes.len() as u64, primes.as_mut_ptr()) };
+        anyhow::ensure!(
+            ret == 0,
+            "unable to set the coefficient modulus",
+        );
+        Ok(())
+    }
+
     ///    Microsoft SEAL comes with helper functions for selecting the
-    /// coeff_modulus.    For new users the easiest way is to simply use
+    /// coeff_modulus. For new users the easiest way is to simply use
     ///
     ///    CoeffModulus::BFVDefault(poly_modulus_degree)
     ///
     ///    which returns std::vector<SmallModulus> consisting of a generally
-    /// good choice    for the given poly_modulus_degree.
-    pub fn set_coeff_modulus(&self, security_level: u8) -> Result<()> {
+    /// good choice for the given poly_modulus_degree.
+    pub fn bfv_default(&self, security_level: u8) -> Result<Vec<*mut c_void>> {
         let poly_modulus_degree = self.get_poly_modulus_degree()?;
         anyhow::ensure!(
             poly_modulus_degree != 0,
@@ -195,15 +205,7 @@ impl Params {
             "unable to get the default coefficients modulus for security: {}",
             security_level
         );
-        // set the coeff modulus
-        let ret =
-            unsafe { EncParams_SetCoeffModulus(self.ptr, coeffs_length, coeffs.as_mut_ptr()) };
-        anyhow::ensure!(
-            ret == 0,
-            "unable to set the coefficients modulus for security: {}",
-            security_level
-        );
-        Ok(())
+        Ok(coeffs)
     }
 
     pub fn set_coeff_modulus_ckks(&self, bits_sizes: &mut [i32]) -> Result<()> {

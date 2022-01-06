@@ -270,7 +270,7 @@ fn test_bgv_simple() -> Result<()> {
     let security_level = 128u8;
     params.set_poly_modulus_degree(4096)?;
     assert_eq!(4096, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(security_level)?;
+    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
     params.set_plain_modulus(1024)?;
     let context = Context::create(params, security_level, true)?;
     // Key Generation
@@ -341,7 +341,7 @@ fn test_bgv_batch_encoder() -> Result<()> {
     let poly_modulus_degree = 4096usize;
     params.set_poly_modulus_degree(poly_modulus_degree)?;
     assert_eq!(poly_modulus_degree, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(security_level)?;
+    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
     // create a modulus for batching
     let plain_modulus = SmallModulus::for_batching(poly_modulus_degree, 20)?.value()?;
     params.set_plain_modulus(plain_modulus)?;
@@ -789,7 +789,7 @@ fn test_serialization() -> Result<()> {
     let security_level = 128u8;
     params.set_poly_modulus_degree(4096)?;
     assert_eq!(4096, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(security_level)?;
+    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
     params.set_plain_modulus(1024)?;
     let context = Context::create(params, security_level, true)?;
     // Key Generation
@@ -819,7 +819,7 @@ fn test_serialization() -> Result<()> {
     let security_level = 128u8;
     params.set_poly_modulus_degree(4096)?;
     assert_eq!(4096, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(security_level)?;
+    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
     params.set_plain_modulus(1024)?;
     let recovered_context = Context::create(params, security_level, true)?;
     // Operations on cipher text - create an evaluator
@@ -881,7 +881,7 @@ fn test_noise_budget() -> Result<()> {
             let params = Params::create(SCHEME_BFV)?;
             params.set_poly_modulus_degree(poly_modulus_degree)?;
             assert_eq!(poly_modulus_degree, params.get_poly_modulus_degree()?);
-            params.set_coeff_modulus(security_level)?;
+            params.set_coeff_modulus(params.bfv_default(security_level)?)?;
             params.set_plain_modulus(plain_modulus)?;
             let context = Context::create(params, security_level, true)?;
 
@@ -972,7 +972,7 @@ fn test_set_params_bfv() -> Result<()> {
     let params = Params::create(SCHEME_BFV)?;
     params.set_poly_modulus_degree(poly_modulus_degree)?;
     assert_eq!(poly_modulus_degree, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(security_level)?;
+    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
     Ok(())
 }
 
@@ -1001,7 +1001,7 @@ fn test_mod_switch_to_next() -> Result<()> {
 
             let params = Params::create(SCHEME_BFV)?;
             params.set_poly_modulus_degree(poly_modulus_degree)?;
-            params.set_coeff_modulus(security_level)?;
+            params.set_coeff_modulus(params.bfv_default(security_level)?)?;
             params.set_plain_modulus(plain_modulus)?;
             let context = Context::create(params, security_level, true)?;
 
