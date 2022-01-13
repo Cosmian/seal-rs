@@ -3,6 +3,7 @@
     non_snake_case,
     non_camel_case_types,
     dead_code,
+    deref_nullptr,
     clippy::unreadable_literal,
     clippy::redundant_static_lifetimes
 )]

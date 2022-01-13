@@ -60,39 +60,46 @@ fn main() {
 
     let mut build = cc::Build::new();
     build.cpp(true).pic(true).flag("-std=c++17").flag("-O3");
-    build.include(".");
-    build.include("seal/thirdparty/msgsl-src/include");
-    build.include("seal/thirdparty/zstd-src/lib/");
-    build.include("seal/thirdparty/zstd-src/lib/common");
 
     for source in include!("sources_c.rs").iter() {
         build.file(format!("seal/native/src/seal/c/{}", source));
     }
 
+    build.include("seal/thirdparty/msgsl-src/include");
+    build.include("seal/thirdparty/zstd-src/lib");
+    build.include("seal/thirdparty/zstd-src/lib/common");
+    build.include("seal");
+    build.include(".");
+    build.compile("sealcnative");
+
     /* build seal */
 
     let mut build = cc::Build::new();
     build.cpp(true).pic(true).flag("-std=c++17").flag("-O3");
-    build.include(".");
-    build.include("seal/thirdparty/msgsl-src/include");
-    build.include("seal/thirdparty/zstd-src/lib/");
-    build.include("seal/thirdparty/zstd-src/lib/common");
 
     for source in include!("sources.rs").iter() {
         build.file(format!("seal/native/src/seal/{}", source));
     }
 
+    build.include(".");
+    build.include("seal/thirdparty/msgsl-src/include");
+    build.include("seal/thirdparty/zstd-src/lib/");
+    build.include("seal/thirdparty/zstd-src/lib/common");
+
     for source in include!("sources_util.rs").iter() {
         build.file(format!("seal/native/src/seal/util/{}", source));
     }
 
-    build.compile("seal-4.5");
+    build.compile("seal-3.7.2");
 
     match os.as_str() {
         "macos" => println!("cargo:rustc-link-lib=dylib=c++"),
         _ => println!("cargo:rustc-link-lib=dylib=stdc++"),
     };
+
+    println!("cargo:rustc-link-search=all=seal/lib");
     println!("cargo:rustc-link-lib=dylib=z");
+    println!("cargo:rustc-link-lib=static=zstd");
 }
 
 fn process_header(header_file: &str) -> String {
