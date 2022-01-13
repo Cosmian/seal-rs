@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/modulus.h"
-#include "seal/util/common.h"
-#include "seal/util/numth.h"
-#include "seal/util/uintarith.h"
-#include "seal/util/uintarithsmallmod.h"
+#include "seal/native/src/seal/modulus.h"
+#include "seal/native/src/seal/util/common.h"
+#include "seal/native/src/seal/util/numth.h"
+#include "seal/native/src/seal/util/uintarith.h"
+#include "seal/native/src/seal/util/uintarithsmallmod.h"
 #include <numeric>
 #include <stdexcept>
 #include <unordered_map>

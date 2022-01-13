@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/util/defines.h"
+#include "seal/native/src/seal/util/defines.h"
 
 #if defined(SEAL_USE_ZLIB) || defined(SEAL_USE_ZSTD)
 
-#include "seal/dynarray.h"
-#include "seal/memorymanager.h"
-#include "seal/serialization.h"
-#include "seal/util/pointer.h"
-#include "seal/util/ztools.h"
+#include "seal/native/src/seal/dynarray.h"
+#include "seal/native/src/seal/memorymanager.h"
+#include "seal/native/src/seal/serialization.h"
+#include "seal/native/src/seal/util/pointer.h"
+#include "seal/native/src/seal/util/ztools.h"
 #include <cstddef>
 #include <cstring>
 #include <ios>

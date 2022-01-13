@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "seal/context.h"
-#include "seal/memorymanager.h"
-#include "seal/plaintext.h"
-#include "seal/util/iterator.h"
+#include "seal/native/src/seal/context.h"
+#include "seal/native/src/seal/memorymanager.h"
+#include "seal/native/src/seal/plaintext.h"
+#include "seal/native/src/seal/util/iterator.h"
 #include <cstdint>
 
 namespace seal

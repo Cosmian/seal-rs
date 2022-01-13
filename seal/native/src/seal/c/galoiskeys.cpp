@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/c/galoiskeys.h"
-#include "seal/c/utilities.h"
+#include "seal/native/src/seal/c/galoiskeys.h"
+#include "seal/native/src/seal/c/utilities.h"
 
 // SEAL
-#include "seal/galoiskeys.h"
+#include "seal/native/src/seal/galoiskeys.h"
 
 using namespace std;
 using namespace seal;

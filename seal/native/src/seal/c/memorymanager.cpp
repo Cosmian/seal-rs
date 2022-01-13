@@ -5,11 +5,11 @@
 #include <utility>
 
 // SEALNet
-#include "seal/c/memorymanager.h"
-#include "seal/c/utilities.h"
+#include "seal/native/src/seal/c/memorymanager.h"
+#include "seal/native/src/seal/c/utilities.h"
 
 // SEAL
-#include "seal/memorymanager.h"
+#include "seal/native/src/seal/memorymanager.h"
 
 using namespace std;
 using namespace seal;

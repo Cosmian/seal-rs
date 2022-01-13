@@ -64,7 +64,7 @@ install(
         ${CMAKE_CURRENT_LIST_DIR}/uintcore.h
         ${CMAKE_CURRENT_LIST_DIR}/ztools.h
     DESTINATION
-        ${SEAL_INCLUDES_INSTALL_DIR}/seal/util
+        ${SEAL_INCLUDES_INSTALL_DIR}/seal/native/src/seal/util
 )
 
 set(SEAL_SOURCE_FILES ${SEAL_SOURCE_FILES} PARENT_SCOPE)

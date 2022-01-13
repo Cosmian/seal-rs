@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/randomgen.h"
-#include "seal/util/blake2.h"
-#include "seal/util/common.h"
-#include "seal/util/fips202.h"
+#include "seal/native/src/seal/randomgen.h"
+#include "seal/native/src/seal/util/blake2.h"
+#include "seal/native/src/seal/util/common.h"
+#include "seal/native/src/seal/util/fips202.h"
 #include <algorithm>
 #include <iostream>
 #include <random>

@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/encryptor.h"
-#include "seal/util/polyarithsmallmod.h"
-#include "seal/util/scalingvariant.h"
-#include "seal/util/uintarith.h"
+#include "seal/native/src/seal/encryptor.h"
+#include "seal/native/src/seal/util/polyarithsmallmod.h"
+#include "seal/native/src/seal/util/scalingvariant.h"
+#include "seal/native/src/seal/util/uintarith.h"
 
 using namespace std;
 

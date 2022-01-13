@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "seal/serialization.h"
-#include "seal/version.h"
-#include "seal/util/defines.h"
-#include "seal/util/hestdparms.h"
-#include "seal/util/uintcore.h"
-#include "seal/util/ztools.h"
+#include "seal/native/src/seal/serialization.h"
+#include "seal/native/src/seal/version.h"
+#include "seal/native/src/seal/util/defines.h"
+#include "seal/native/src/seal/util/hestdparms.h"
+#include "seal/native/src/seal/util/uintcore.h"
+#include "seal/native/src/seal/util/ztools.h"
 #include <array>
 #include <cstddef>
 #include <cstdint>

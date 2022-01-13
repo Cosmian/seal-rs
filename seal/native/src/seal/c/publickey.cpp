@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/c/publickey.h"
-#include "seal/c/utilities.h"
+#include "seal/native/src/seal/c/publickey.h"
+#include "seal/native/src/seal/c/utilities.h"
 
 // SEAL
-#include "seal/publickey.h"
+#include "seal/native/src/seal/publickey.h"
 
 using namespace std;
 using namespace seal;

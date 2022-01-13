@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/util/croots.h"
+#include "seal/native/src/seal/util/croots.h"
 #include <complex>
 
 using namespace std;

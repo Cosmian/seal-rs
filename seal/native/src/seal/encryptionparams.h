@@ -3,15 +3,15 @@
 
 #pragma once
 
-#include "seal/memorymanager.h"
-#include "seal/modulus.h"
-#include "seal/randomgen.h"
-#include "seal/serialization.h"
-#include "seal/version.h"
-#include "seal/util/defines.h"
-#include "seal/util/globals.h"
-#include "seal/util/hash.h"
-#include "seal/util/ztools.h"
+#include "seal/native/src/seal/memorymanager.h"
+#include "seal/native/src/seal/modulus.h"
+#include "seal/native/src/seal/randomgen.h"
+#include "seal/native/src/seal/serialization.h"
+#include "seal/native/src/seal/version.h"
+#include "seal/native/src/seal/util/defines.h"
+#include "seal/native/src/seal/util/globals.h"
+#include "seal/native/src/seal/util/hash.h"
+#include "seal/native/src/seal/util/ztools.h"
 #include <functional>
 #include <iostream>
 #include <memory>

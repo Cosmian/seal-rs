@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/c/memorypoolhandle.h"
-#include "seal/c/utilities.h"
+#include "seal/native/src/seal/c/memorypoolhandle.h"
+#include "seal/native/src/seal/c/utilities.h"
 
 // SEAL
-#include "seal/memorymanager.h"
+#include "seal/native/src/seal/memorymanager.h"
 
 using namespace std;
 using namespace seal;

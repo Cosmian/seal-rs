@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/encryptionparams.h"
-#include "seal/util/uintcore.h"
+#include "seal/native/src/seal/encryptionparams.h"
+#include "seal/native/src/seal/util/uintcore.h"
 #include <limits>
 
 using namespace std;

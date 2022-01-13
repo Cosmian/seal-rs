@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/kswitchkeys.h"
+#include "seal/native/src/seal/kswitchkeys.h"
 #include <stdexcept>
 
 using namespace std;

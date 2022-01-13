@@ -7,7 +7,7 @@
 #include <cstddef>
 
 // SEALNet
-#include "seal/c/stdafx.h"
+#include "seal/native/src/seal/c/stdafx.h"
 
 // Check that std::size_t is 64 bits
 static_assert(sizeof(std::size_t) == 8, "Require sizeof(std::size_t) == 8");

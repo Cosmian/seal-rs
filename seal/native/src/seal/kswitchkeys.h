@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "seal/encryptionparams.h"
-#include "seal/memorymanager.h"
-#include "seal/publickey.h"
-#include "seal/valcheck.h"
-#include "seal/version.h"
+#include "seal/native/src/seal/encryptionparams.h"
+#include "seal/native/src/seal/memorymanager.h"
+#include "seal/native/src/seal/publickey.h"
+#include "seal/native/src/seal/valcheck.h"
+#include "seal/native/src/seal/version.h"
 #include <iostream>
 #include <vector>
 

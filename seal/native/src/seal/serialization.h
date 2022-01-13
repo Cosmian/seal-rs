@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "seal/version.h"
-#include "seal/util/defines.h"
+#include "seal/native/src/seal/version.h"
+#include "seal/native/src/seal/util/defines.h"
 #include <cstdint>
 #include <cstring>
 #include <functional>

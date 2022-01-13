@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "seal/dynarray.h"
-#include "seal/util/defines.h"
+#include "seal/native/src/seal/dynarray.h"
+#include "seal/native/src/seal/util/defines.h"
 #include <cstddef>
 #include <ios>
 #include <streambuf>

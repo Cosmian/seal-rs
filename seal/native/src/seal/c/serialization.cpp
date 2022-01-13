@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/c/serialization.h"
-#include "seal/c/utilities.h"
+#include "seal/native/src/seal/c/serialization.h"
+#include "seal/native/src/seal/c/utilities.h"
 
 // SEAL
-#include "seal/serialization.h"
+#include "seal/native/src/seal/serialization.h"
 
 using namespace std;
 using namespace seal;

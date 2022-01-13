@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "seal/memorymanager.h"
-#include "seal/modulus.h"
-#include "seal/util/common.h"
-#include "seal/util/defines.h"
-#include "seal/util/pointer.h"
+#include "seal/native/src/seal/memorymanager.h"
+#include "seal/native/src/seal/modulus.h"
+#include "seal/native/src/seal/util/common.h"
+#include "seal/native/src/seal/util/defines.h"
+#include "seal/native/src/seal/util/pointer.h"
 #include <cmath>
 #include <cstddef>
 #include <cstdint>

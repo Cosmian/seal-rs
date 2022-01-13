@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/c/relinkeys.h"
-#include "seal/c/utilities.h"
+#include "seal/native/src/seal/c/relinkeys.h"
+#include "seal/native/src/seal/c/utilities.h"
 
 // SEAL
-#include "seal/relinkeys.h"
+#include "seal/native/src/seal/relinkeys.h"
 
 using namespace std;
 using namespace seal;

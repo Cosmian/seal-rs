@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/ckks.h"
+#include "seal/native/src/seal/ckks.h"
 #include <random>
 #include <stdexcept>
 

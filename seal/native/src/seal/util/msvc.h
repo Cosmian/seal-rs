@@ -11,7 +11,7 @@
 #endif
 
 // Read in config.h
-#include "seal/util/config.h"
+#include "seal/native/src/seal/util/config.h"
 
 // In Visual Studio redefine std::byte (seal_byte)
 #undef SEAL_USE_STD_BYTE

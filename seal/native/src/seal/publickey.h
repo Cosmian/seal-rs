@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "seal/ciphertext.h"
-#include "seal/context.h"
-#include "seal/valcheck.h"
+#include "seal/native/src/seal/ciphertext.h"
+#include "seal/native/src/seal/context.h"
+#include "seal/native/src/seal/valcheck.h"
 #include <iostream>
 
 namespace seal

@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "seal/util/defines.h"
-#include "seal/util/globals.h"
-#include "seal/util/mempool.h"
+#include "seal/native/src/seal/util/defines.h"
+#include "seal/native/src/seal/util/globals.h"
+#include "seal/native/src/seal/util/mempool.h"
 #include <memory>
 #include <stdexcept>
 #include <unordered_map>

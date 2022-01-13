@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/memorymanager.h"
+#include "seal/native/src/seal/memorymanager.h"
 
 using namespace std;
 

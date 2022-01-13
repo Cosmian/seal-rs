@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/c/decryptor.h"
-#include "seal/c/utilities.h"
+#include "seal/native/src/seal/c/decryptor.h"
+#include "seal/native/src/seal/c/utilities.h"
 
 // SEAL
-#include "seal/decryptor.h"
+#include "seal/native/src/seal/decryptor.h"
 
 using namespace std;
 using namespace seal;

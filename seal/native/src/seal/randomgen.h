@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "seal/dynarray.h"
-#include "seal/memorymanager.h"
-#include "seal/version.h"
-#include "seal/util/common.h"
-#include "seal/util/defines.h"
+#include "seal/native/src/seal/dynarray.h"
+#include "seal/native/src/seal/memorymanager.h"
+#include "seal/native/src/seal/version.h"
+#include "seal/native/src/seal/util/common.h"
+#include "seal/native/src/seal/util/defines.h"
 #include <algorithm>
 #include <array>
 #include <cstddef>

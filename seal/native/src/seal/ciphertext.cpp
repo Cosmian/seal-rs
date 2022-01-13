@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/ciphertext.h"
-#include "seal/util/defines.h"
-#include "seal/util/pointer.h"
-#include "seal/util/polyarithsmallmod.h"
-#include "seal/util/rlwe.h"
+#include "seal/native/src/seal/ciphertext.h"
+#include "seal/native/src/seal/util/defines.h"
+#include "seal/native/src/seal/util/pointer.h"
+#include "seal/native/src/seal/util/polyarithsmallmod.h"
+#include "seal/native/src/seal/util/rlwe.h"
 #include <algorithm>
 
 using namespace std;

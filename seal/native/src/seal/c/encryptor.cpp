@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/c/encryptor.h"
-#include "seal/c/utilities.h"
+#include "seal/native/src/seal/c/encryptor.h"
+#include "seal/native/src/seal/c/utilities.h"
 
 // SEAL
-#include "seal/encryptor.h"
+#include "seal/native/src/seal/encryptor.h"
 
 using namespace std;
 using namespace seal;

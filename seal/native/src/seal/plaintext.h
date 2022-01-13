@@ -3,15 +3,15 @@
 
 #pragma once
 
-#include "seal/context.h"
-#include "seal/dynarray.h"
-#include "seal/encryptionparams.h"
-#include "seal/memorymanager.h"
-#include "seal/valcheck.h"
-#include "seal/version.h"
-#include "seal/util/common.h"
-#include "seal/util/defines.h"
-#include "seal/util/polycore.h"
+#include "seal/native/src/seal/context.h"
+#include "seal/native/src/seal/dynarray.h"
+#include "seal/native/src/seal/encryptionparams.h"
+#include "seal/native/src/seal/memorymanager.h"
+#include "seal/native/src/seal/valcheck.h"
+#include "seal/native/src/seal/version.h"
+#include "seal/native/src/seal/util/common.h"
+#include "seal/native/src/seal/util/defines.h"
+#include "seal/native/src/seal/util/polycore.h"
 #include <algorithm>
 #include <functional>
 #include <stdexcept>

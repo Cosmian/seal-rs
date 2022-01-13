@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/encryptor.h"
-#include "seal/modulus.h"
-#include "seal/randomtostd.h"
-#include "seal/util/common.h"
-#include "seal/util/iterator.h"
-#include "seal/util/polyarithsmallmod.h"
-#include "seal/util/rlwe.h"
-#include "seal/util/scalingvariant.h"
+#include "seal/native/src/seal/encryptor.h"
+#include "seal/native/src/seal/modulus.h"
+#include "seal/native/src/seal/randomtostd.h"
+#include "seal/native/src/seal/util/common.h"
+#include "seal/native/src/seal/util/iterator.h"
+#include "seal/native/src/seal/util/polyarithsmallmod.h"
+#include "seal/native/src/seal/util/rlwe.h"
+#include "seal/native/src/seal/util/scalingvariant.h"
 #include <algorithm>
 #include <stdexcept>
 

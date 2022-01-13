@@ -10,7 +10,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "seal/c/defines.h"
+#include "seal/native/src/seal/c/defines.h"
 #include <stdint.h>
 
 SEAL_C_FUNC Encryptor_Create(void *context, void *public_key, void *secret_key, void **encryptor);

@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/util/common.h"
-#include "seal/util/numth.h"
-#include "seal/util/polyarithsmallmod.h"
-#include "seal/util/rns.h"
-#include "seal/util/uintarithmod.h"
-#include "seal/util/uintarithsmallmod.h"
+#include "seal/native/src/seal/util/common.h"
+#include "seal/native/src/seal/util/numth.h"
+#include "seal/native/src/seal/util/polyarithsmallmod.h"
+#include "seal/native/src/seal/util/rns.h"
+#include "seal/native/src/seal/util/uintarithmod.h"
+#include "seal/native/src/seal/util/uintarithsmallmod.h"
 #include <algorithm>
 
 using namespace std;

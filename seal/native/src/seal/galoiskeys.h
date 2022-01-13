@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "seal/ciphertext.h"
-#include "seal/kswitchkeys.h"
-#include "seal/memorymanager.h"
-#include "seal/util/defines.h"
-#include "seal/util/galois.h"
+#include "seal/native/src/seal/ciphertext.h"
+#include "seal/native/src/seal/kswitchkeys.h"
+#include "seal/native/src/seal/memorymanager.h"
+#include "seal/native/src/seal/util/defines.h"
+#include "seal/native/src/seal/util/galois.h"
 #include <vector>
 
 namespace seal

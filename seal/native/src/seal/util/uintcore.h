@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "seal/util/common.h"
-#include "seal/util/defines.h"
-#include "seal/util/pointer.h"
+#include "seal/native/src/seal/util/common.h"
+#include "seal/native/src/seal/util/defines.h"
+#include "seal/native/src/seal/util/pointer.h"
 #include <algorithm>
 #include <cstdint>
 #include <cstring>

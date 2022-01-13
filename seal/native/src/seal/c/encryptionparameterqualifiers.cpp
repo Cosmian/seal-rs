@@ -5,11 +5,11 @@
 #include <string.h>
 
 // SEALNet
-#include "seal/c/encryptionparameterqualifiers.h"
-#include "seal/c/utilities.h"
+#include "seal/native/src/seal/c/encryptionparameterqualifiers.h"
+#include "seal/native/src/seal/c/utilities.h"
 
 // SEAL
-#include "seal/context.h"
+#include "seal/native/src/seal/context.h"
 
 using namespace std;
 using namespace seal;
