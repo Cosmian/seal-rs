@@ -18,7 +18,7 @@ as `Microsoft SEAL edit: ...`.
 #include <stddef.h>
 #include <stdint.h>
 /* Microsoft SEAL edit: changed the header file path */
-#include "seal/native/src/seal/util/fips202.h"
+#include "seal/util/fips202.h"
 
 /* Microsoft SEAL edit: moved the rate macros here from Kyber header fips202.h */
 #define SHAKE128_RATE 168

@@ -3,15 +3,15 @@
 
 #pragma once
 
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/galoiskeys.h"
-#include "seal/native/src/seal/memorymanager.h"
-#include "seal/native/src/seal/publickey.h"
-#include "seal/native/src/seal/relinkeys.h"
-#include "seal/native/src/seal/secretkey.h"
-#include "seal/native/src/seal/serializable.h"
-#include "seal/native/src/seal/util/defines.h"
-#include "seal/native/src/seal/util/iterator.h"
+#include "seal/context.h"
+#include "seal/galoiskeys.h"
+#include "seal/memorymanager.h"
+#include "seal/publickey.h"
+#include "seal/relinkeys.h"
+#include "seal/secretkey.h"
+#include "seal/serializable.h"
+#include "seal/util/defines.h"
+#include "seal/util/iterator.h"
 #include <random>
 
 namespace seal

@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/native/src/seal/c/utilities.h"
-#include "seal/native/src/seal/c/valcheck.h"
+#include "seal/c/utilities.h"
+#include "seal/c/valcheck.h"
 
 // SEAL
-#include "seal/native/src/seal/valcheck.h"
+#include "seal/valcheck.h"
 
 using namespace std;
 using namespace seal;

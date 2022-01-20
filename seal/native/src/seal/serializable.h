@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "seal/native/src/seal/serialization.h"
-#include "seal/native/src/seal/util/defines.h"
-#include "seal/native/src/seal/util/streambuf.h"
+#include "seal/serialization.h"
+#include "seal/util/defines.h"
+#include "seal/util/streambuf.h"
 #include <ios>
 #include <iostream>
 

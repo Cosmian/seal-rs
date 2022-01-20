@@ -3,16 +3,16 @@
 
 #pragma once
 
-#include "seal/native/src/seal/ciphertext.h"
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/encryptionparams.h"
-#include "seal/native/src/seal/memorymanager.h"
-#include "seal/native/src/seal/plaintext.h"
-#include "seal/native/src/seal/publickey.h"
-#include "seal/native/src/seal/secretkey.h"
-#include "seal/native/src/seal/serializable.h"
-#include "seal/native/src/seal/util/defines.h"
-#include "seal/native/src/seal/util/ntt.h"
+#include "seal/ciphertext.h"
+#include "seal/context.h"
+#include "seal/encryptionparams.h"
+#include "seal/memorymanager.h"
+#include "seal/plaintext.h"
+#include "seal/publickey.h"
+#include "seal/secretkey.h"
+#include "seal/serializable.h"
+#include "seal/util/defines.h"
+#include "seal/util/ntt.h"
 #include <vector>
 
 namespace seal

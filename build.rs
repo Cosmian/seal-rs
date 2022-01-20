@@ -1,13 +1,9 @@
 use std::{
-    env,
     fs::{write, File},
     io::{BufRead, BufReader},
 };
 
 fn main() {
-    let os = env::var("CARGO_CFG_TARGET_OS").unwrap();
-    let _dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-
     // write wrapper.h
     let mut s = String::new();
     s += "#include \"stdint.h\"\n";
@@ -56,50 +52,16 @@ fn main() {
         .write_to_file(out_path.join("seal_bindings.rs"))
         .expect("Couldn't write bindings for SEAL!");
 
-    /* build sealc */
-
-    let mut build = cc::Build::new();
-    build.cpp(true).pic(true).flag("-std=c++17").flag("-O3");
-
-    for source in include!("sources_c.rs").iter() {
-        build.file(format!("seal/native/src/seal/c/{}", source));
-    }
-
-    build.include("seal/thirdparty/msgsl-src/include");
-    build.include("seal/thirdparty/zstd-src/lib");
-    build.include("seal/thirdparty/zstd-src/lib/common");
-    build.include("seal");
-    build.include(".");
-    build.compile("sealcnative");
-
     /* build seal */
 
-    let mut build = cc::Build::new();
-    build.cpp(true).pic(true).flag("-std=c++17").flag("-O3");
+    let dst = cmake::Config::new("seal")
+        .define("SEAL_BUILD_SEAL_C", "ON")
+        .build();
 
-    for source in include!("sources.rs").iter() {
-        build.file(format!("seal/native/src/seal/{}", source));
-    }
+    // link the SEALC lib
+    println!("cargo:rustc-link-search=native={}/lib", dst.display());
+    println!("cargo:rustc-link-lib=sealc");
 
-    build.include(".");
-    build.include("seal/thirdparty/msgsl-src/include");
-    build.include("seal/thirdparty/zstd-src/lib/");
-    build.include("seal/thirdparty/zstd-src/lib/common");
-
-    for source in include!("sources_util.rs").iter() {
-        build.file(format!("seal/native/src/seal/util/{}", source));
-    }
-
-    build.compile("seal-3.7.2");
-
-    match os.as_str() {
-        "macos" => println!("cargo:rustc-link-lib=dylib=c++"),
-        _ => println!("cargo:rustc-link-lib=dylib=stdc++"),
-    };
-
-    println!("cargo:rustc-link-search=all=seal/lib");
-    println!("cargo:rustc-link-lib=dylib=z");
-    println!("cargo:rustc-link-lib=static=zstd");
 }
 
 fn process_header(header_file: &str) -> String {
@@ -121,7 +83,6 @@ fn process_header(header_file: &str) -> String {
                 }
                 reader.read_line(&mut buf).unwrap();
             }
-            // #define SEAL_C_FUNC SEAL_C_DECOR HRESULT SEAL_C_CALL
             buf = buf.replace("SEAL_C_FUNC", "long");
             buf = buf.replace("bool ", "int ");
             s += &buf;

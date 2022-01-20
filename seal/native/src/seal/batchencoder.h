@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/plaintext.h"
-#include "seal/native/src/seal/util/defines.h"
+#include "seal/context.h"
+#include "seal/plaintext.h"
+#include "seal/util/defines.h"
 #include <vector>
 #ifdef SEAL_USE_MSGSL
 #include "gsl/span"

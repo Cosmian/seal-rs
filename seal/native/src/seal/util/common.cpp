@@ -5,7 +5,7 @@
 #define __STDC_WANT_LIB_EXT1__ 1
 #endif
 
-#include "seal/native/src/seal/util/common.h"
+#include "seal/util/common.h"
 #include <string.h>
 
 #if (SEAL_SYSTEM == SEAL_SYSTEM_WINDOWS)

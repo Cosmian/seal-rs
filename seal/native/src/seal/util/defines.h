@@ -100,13 +100,13 @@ static_assert(sizeof(unsigned long long) == 8, "Require sizeof(unsigned long lon
 #endif
 
 // MSVC support
-#include "seal/native/src/seal/util/msvc.h"
+#include "seal/util/msvc.h"
 
 // clang support
-#include "seal/native/src/seal/util/clang.h"
+#include "seal/util/clang.h"
 
 // gcc support
-#include "seal/native/src/seal/util/gcc.h"
+#include "seal/util/gcc.h"
 
 // Create a true/false value for indicating debug mode
 #ifdef SEAL_DEBUG

@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "seal/native/src/seal/util/defines.h"
+#include "seal/util/defines.h"
 
 #if defined(SEAL_USE_ZLIB) || defined(SEAL_USE_ZSTD)
-#include "seal/native/src/seal/dynarray.h"
-#include "seal/native/src/seal/memorymanager.h"
+#include "seal/dynarray.h"
+#include "seal/memorymanager.h"
 #include <ios>
 #include <iostream>
 

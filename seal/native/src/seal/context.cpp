@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/util/numth.h"
-#include "seal/native/src/seal/util/pointer.h"
-#include "seal/native/src/seal/util/polycore.h"
-#include "seal/native/src/seal/util/uintarith.h"
-#include "seal/native/src/seal/util/uintarithsmallmod.h"
+#include "seal/context.h"
+#include "seal/util/numth.h"
+#include "seal/util/pointer.h"
+#include "seal/util/polycore.h"
+#include "seal/util/uintarith.h"
+#include "seal/util/uintarithsmallmod.h"
 #include <algorithm>
 #include <stdexcept>
 #include <utility>

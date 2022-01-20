@@ -3,16 +3,16 @@
 
 #pragma once
 
-#include "seal/native/src/seal/ciphertext.h"
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/galoiskeys.h"
-#include "seal/native/src/seal/memorymanager.h"
-#include "seal/native/src/seal/modulus.h"
-#include "seal/native/src/seal/plaintext.h"
-#include "seal/native/src/seal/relinkeys.h"
-#include "seal/native/src/seal/secretkey.h"
-#include "seal/native/src/seal/valcheck.h"
-#include "seal/native/src/seal/util/iterator.h"
+#include "seal/ciphertext.h"
+#include "seal/context.h"
+#include "seal/galoiskeys.h"
+#include "seal/memorymanager.h"
+#include "seal/modulus.h"
+#include "seal/plaintext.h"
+#include "seal/relinkeys.h"
+#include "seal/secretkey.h"
+#include "seal/valcheck.h"
+#include "seal/util/iterator.h"
 #include <map>
 #include <stdexcept>
 #include <vector>

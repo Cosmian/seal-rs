@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/native/src/seal/ciphertext.h"
-#include "seal/native/src/seal/util/iterator.h"
+#include "seal/ciphertext.h"
+#include "seal/util/iterator.h"
 
 namespace seal
 {

@@ -3,14 +3,14 @@
 
 #pragma once
 
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/plaintext.h"
-#include "seal/native/src/seal/util/common.h"
-#include "seal/native/src/seal/util/croots.h"
-#include "seal/native/src/seal/util/defines.h"
-#include "seal/native/src/seal/util/dwthandler.h"
-#include "seal/native/src/seal/util/uintarithsmallmod.h"
-#include "seal/native/src/seal/util/uintcore.h"
+#include "seal/context.h"
+#include "seal/plaintext.h"
+#include "seal/util/common.h"
+#include "seal/util/croots.h"
+#include "seal/util/defines.h"
+#include "seal/util/dwthandler.h"
+#include "seal/util/uintarithsmallmod.h"
+#include "seal/util/uintcore.h"
 #include <cmath>
 #include <complex>
 #include <limits>

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/native/src/seal/util/clipnormal.h"
+#include "seal/util/clipnormal.h"
 #include <stdexcept>
 
 using namespace std;

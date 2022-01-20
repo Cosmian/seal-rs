@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "seal/native/src/seal/memorymanager.h"
-#include "seal/native/src/seal/modulus.h"
-#include "seal/native/src/seal/util/iterator.h"
-#include "seal/native/src/seal/util/ntt.h"
-#include "seal/native/src/seal/util/pointer.h"
-#include "seal/native/src/seal/util/uintarithsmallmod.h"
+#include "seal/memorymanager.h"
+#include "seal/modulus.h"
+#include "seal/util/iterator.h"
+#include "seal/util/ntt.h"
+#include "seal/util/pointer.h"
+#include "seal/util/uintarithsmallmod.h"
 #include <cstddef>
 #include <cstdint>
 #include <functional>

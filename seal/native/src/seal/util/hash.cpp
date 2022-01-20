@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/native/src/seal/util/hash.h"
+#include "seal/util/hash.h"
 
 using namespace std;
 

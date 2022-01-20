@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/native/src/seal/dynarray.h"
-#include "seal/native/src/seal/memorymanager.h"
-#include "seal/native/src/seal/serialization.h"
-#include "seal/native/src/seal/util/common.h"
-#include "seal/native/src/seal/util/streambuf.h"
-#include "seal/native/src/seal/util/ztools.h"
+#include "seal/dynarray.h"
+#include "seal/memorymanager.h"
+#include "seal/serialization.h"
+#include "seal/util/common.h"
+#include "seal/util/streambuf.h"
+#include "seal/util/ztools.h"
 #include <stdexcept>
 #include <typeinfo>
 

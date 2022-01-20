@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/native/src/seal/c/kswitchkeys.h"
-#include "seal/native/src/seal/c/utilities.h"
+#include "seal/c/kswitchkeys.h"
+#include "seal/c/utilities.h"
 
 // SEAL
-#include "seal/native/src/seal/kswitchkeys.h"
+#include "seal/kswitchkeys.h"
 
 using namespace std;
 using namespace seal;

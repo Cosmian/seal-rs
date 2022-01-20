@@ -6,12 +6,12 @@
 #include <iterator>
 
 // SEALNet
-#include "seal/native/src/seal/c/keygenerator.h"
-#include "seal/native/src/seal/c/utilities.h"
+#include "seal/c/keygenerator.h"
+#include "seal/c/utilities.h"
 
 // SEAL
-#include "seal/native/src/seal/keygenerator.h"
-#include "seal/native/src/seal/util/common.h"
+#include "seal/keygenerator.h"
+#include "seal/util/common.h"
 
 using namespace std;
 using namespace seal;

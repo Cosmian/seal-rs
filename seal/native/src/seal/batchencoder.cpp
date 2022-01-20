@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/native/src/seal/batchencoder.h"
-#include "seal/native/src/seal/valcheck.h"
-#include "seal/native/src/seal/util/common.h"
+#include "seal/batchencoder.h"
+#include "seal/valcheck.h"
+#include "seal/util/common.h"
 #include <algorithm>
 #include <limits>
 #include <random>

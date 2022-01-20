@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/util/defines.h"
+#include "seal/context.h"
+#include "seal/util/defines.h"
 
 namespace seal
 {

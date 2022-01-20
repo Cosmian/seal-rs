@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "seal/native/src/seal/encryptionparams.h"
-#include "seal/native/src/seal/memorymanager.h"
-#include "seal/native/src/seal/modulus.h"
-#include "seal/native/src/seal/util/galois.h"
-#include "seal/native/src/seal/util/ntt.h"
-#include "seal/native/src/seal/util/pointer.h"
-#include "seal/native/src/seal/util/rns.h"
+#include "seal/encryptionparams.h"
+#include "seal/memorymanager.h"
+#include "seal/modulus.h"
+#include "seal/util/galois.h"
+#include "seal/util/ntt.h"
+#include "seal/util/pointer.h"
+#include "seal/util/rns.h"
 #include <memory>
 #include <unordered_map>
 
