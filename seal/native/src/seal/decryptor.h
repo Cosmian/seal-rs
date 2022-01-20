@@ -3,19 +3,19 @@
 
 #pragma once
 
-#include "seal/native/src/seal/ciphertext.h"
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/encryptionparams.h"
-#include "seal/native/src/seal/memorymanager.h"
-#include "seal/native/src/seal/modulus.h"
-#include "seal/native/src/seal/plaintext.h"
-#include "seal/native/src/seal/randomgen.h"
-#include "seal/native/src/seal/secretkey.h"
-#include "seal/native/src/seal/util/defines.h"
-#include "seal/native/src/seal/util/iterator.h"
-#include "seal/native/src/seal/util/locks.h"
-#include "seal/native/src/seal/util/ntt.h"
-#include "seal/native/src/seal/util/rns.h"
+#include "seal/ciphertext.h"
+#include "seal/context.h"
+#include "seal/encryptionparams.h"
+#include "seal/memorymanager.h"
+#include "seal/modulus.h"
+#include "seal/plaintext.h"
+#include "seal/randomgen.h"
+#include "seal/secretkey.h"
+#include "seal/util/defines.h"
+#include "seal/util/iterator.h"
+#include "seal/util/locks.h"
+#include "seal/util/ntt.h"
+#include "seal/util/rns.h"
 
 namespace seal
 {

@@ -3,14 +3,14 @@
 
 #pragma once
 
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/dynarray.h"
-#include "seal/native/src/seal/memorymanager.h"
-#include "seal/native/src/seal/randomgen.h"
-#include "seal/native/src/seal/valcheck.h"
-#include "seal/native/src/seal/version.h"
-#include "seal/native/src/seal/util/common.h"
-#include "seal/native/src/seal/util/defines.h"
+#include "seal/context.h"
+#include "seal/dynarray.h"
+#include "seal/memorymanager.h"
+#include "seal/randomgen.h"
+#include "seal/valcheck.h"
+#include "seal/version.h"
+#include "seal/util/common.h"
+#include "seal/util/defines.h"
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>

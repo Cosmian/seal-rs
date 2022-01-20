@@ -10,7 +10,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "seal/native/src/seal/c/defines.h"
+#include "seal/c/defines.h"
 #include <stdint.h>
 
 SEAL_C_FUNC Modulus_Create1(uint64_t value, void **small_modulus);

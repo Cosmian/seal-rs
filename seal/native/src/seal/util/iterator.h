@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "seal/native/src/seal/util/common.h"
-#include "seal/native/src/seal/util/defines.h"
-#include "seal/native/src/seal/util/pointer.h"
+#include "seal/util/common.h"
+#include "seal/util/defines.h"
+#include "seal/util/pointer.h"
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
@@ -211,7 +211,7 @@ namespace seal
         Here the parameter I is of type IterTuple<RNSIter, RNSIter, RNSIter>. Inside the lambda function we first copy
         the RNS polynomial from get<0>(I) (encrypted1) to get<1>(I) (encrypted1_q) and transform it to NTT form. We use
         an overload of ntt_negacyclic_harvey_lazy that takes an RNSIter, size of the RNS base, and ConstNTTTablesIter as
-        arguments and converts each RNS component separately. Looking at seal/native/src/seal/util/ntt.h we see that the function
+        arguments and converts each RNS component separately. Looking at seal/util/ntt.h we see that the function
         ntt_negacyclic_harvey_lazy is again implemented using SEAL_ITERATE. Specifically, it contains the following:
 
         SEAL_ITERATE(iter(operand, tables), coeff_modulus_size, [&](auto I) {
@@ -232,7 +232,7 @@ namespace seal
                will produce simple looking code that performs well with the expected outcome.
             3. The only exception to 2. is when SEAL_ITERATE operates on a single PtrIter<T *>: dereferencing returns a
                T &, which may be important to forward by reference to the lambda function. For an example of this, see
-               seal::util::ntt_negacyclic_harvey in seal/native/src/seal/util/ntt.h, where the lambda function parameter is auto &.
+               seal::util::ntt_negacyclic_harvey in seal/util/ntt.h, where the lambda function parameter is auto &.
 
                Note: IterTuple<PolyIter, CoeffIter> will dereference to std::tuple<RNSIter, std::uint64_t &>, which can
                safely be passed by value to the lambda function. Hence, a parameter of type auto in the lambda function

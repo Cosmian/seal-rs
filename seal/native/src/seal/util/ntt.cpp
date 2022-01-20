@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-#include "seal/native/src/seal/util/ntt.h"
-#include "seal/native/src/seal/util/uintarith.h"
-#include "seal/native/src/seal/util/uintarithsmallmod.h"
+#include "seal/util/ntt.h"
+#include "seal/util/uintarith.h"
+#include "seal/util/uintarithsmallmod.h"
 #include <algorithm>
 #ifdef SEAL_USE_INTEL_HEXL
-#include "seal/native/src/seal/memorymanager.h"
-#include "seal/native/src/seal/util/iterator.h"
-#include "seal/native/src/seal/util/locks.h"
-#include "seal/native/src/seal/util/pointer.h"
+#include "seal/memorymanager.h"
+#include "seal/util/iterator.h"
+#include "seal/util/locks.h"
+#include "seal/util/pointer.h"
 #include <unordered_map>
 #include "hexl/hexl.hpp"
 #endif

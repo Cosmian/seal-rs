@@ -10,7 +10,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "seal/native/src/seal/c/defines.h"
+#include "seal/c/defines.h"
 #include <stdint.h>
 
 SEAL_C_FUNC SEALContext_Create(void *encryptionParams, bool expand_mod_chain, int sec_level, void **context);

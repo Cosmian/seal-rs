@@ -6,14 +6,14 @@
 #include <iterator>
 
 // SEALNet
-#include "seal/native/src/seal/c/utilities.h"
+#include "seal/c/utilities.h"
 
 // SEAL
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/encryptionparams.h"
-#include "seal/native/src/seal/modulus.h"
-#include "seal/native/src/seal/util/common.h"
-#include "seal/native/src/seal/util/locks.h"
+#include "seal/context.h"
+#include "seal/encryptionparams.h"
+#include "seal/modulus.h"
+#include "seal/util/common.h"
+#include "seal/util/locks.h"
 
 using namespace std;
 using namespace seal;

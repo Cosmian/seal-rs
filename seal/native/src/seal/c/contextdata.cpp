@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 // SEALNet
-#include "seal/native/src/seal/c/contextdata.h"
-#include "seal/native/src/seal/c/utilities.h"
+#include "seal/c/contextdata.h"
+#include "seal/c/utilities.h"
 
 // SEAL
-#include "seal/native/src/seal/context.h"
+#include "seal/context.h"
 
 using namespace std;
 using namespace seal;

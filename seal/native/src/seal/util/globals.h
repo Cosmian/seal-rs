@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "seal/native/src/seal/util/hestdparms.h"
+#include "seal/util/hestdparms.h"
 #include <cstddef>
 #include <map>
 #include <memory>

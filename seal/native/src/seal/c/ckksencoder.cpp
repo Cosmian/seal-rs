@@ -5,11 +5,11 @@
 #include <vector>
 
 // SEALNet
-#include "seal/native/src/seal/c/ckksencoder.h"
-#include "seal/native/src/seal/c/utilities.h"
+#include "seal/c/ckksencoder.h"
+#include "seal/c/utilities.h"
 
 // SEAL
-#include "seal/native/src/seal/ckks.h"
+#include "seal/ckks.h"
 
 using namespace std;
 using namespace seal;

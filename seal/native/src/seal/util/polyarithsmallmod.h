@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "seal/native/src/seal/modulus.h"
-#include "seal/native/src/seal/util/common.h"
-#include "seal/native/src/seal/util/defines.h"
-#include "seal/native/src/seal/util/iterator.h"
-#include "seal/native/src/seal/util/pointer.h"
-#include "seal/native/src/seal/util/polycore.h"
-#include "seal/native/src/seal/util/uintarithsmallmod.h"
+#include "seal/modulus.h"
+#include "seal/util/common.h"
+#include "seal/util/defines.h"
+#include "seal/util/iterator.h"
+#include "seal/util/pointer.h"
+#include "seal/util/polycore.h"
+#include "seal/util/uintarithsmallmod.h"
 #include <algorithm>
 #include <cstdint>
 #include <stdexcept>

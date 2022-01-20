@@ -10,7 +10,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "seal/native/src/seal/c/defines.h"
+#include "seal/c/defines.h"
 #include <stdint.h>
 
 SEAL_C_FUNC Decryptor_Create(void *context, void *secret_key, void **decryptor);

@@ -5,11 +5,11 @@
 #include <vector>
 
 // SEALNet
-#include "seal/native/src/seal/c/batchencoder.h"
-#include "seal/native/src/seal/c/utilities.h"
+#include "seal/c/batchencoder.h"
+#include "seal/c/utilities.h"
 
 // SEAL
-#include "seal/native/src/seal/batchencoder.h"
+#include "seal/batchencoder.h"
 
 using namespace std;
 using namespace seal;

@@ -5,12 +5,12 @@
 #include <unordered_map>
 
 // SEALNet
-#include "seal/native/src/seal/c/sealcontext.h"
-#include "seal/native/src/seal/c/utilities.h"
+#include "seal/c/sealcontext.h"
+#include "seal/c/utilities.h"
 
 // SEAL
-#include "seal/native/src/seal/context.h"
-#include "seal/native/src/seal/util/locks.h"
+#include "seal/context.h"
+#include "seal/util/locks.h"
 
 using namespace std;
 using namespace seal;

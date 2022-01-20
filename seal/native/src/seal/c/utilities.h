@@ -11,10 +11,10 @@
 #include <vector>
 
 // SEALNet
-#include "seal/native/src/seal/c/defines.h"
+#include "seal/c/defines.h"
 
 // SEAL
-#include "seal/native/src/seal/encryptionparams.h"
+#include "seal/encryptionparams.h"
 
 namespace seal
 {

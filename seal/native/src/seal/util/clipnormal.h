@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "seal/native/src/seal/util/defines.h"
+#include "seal/util/defines.h"
 #include <cmath>
 #include <random>
 

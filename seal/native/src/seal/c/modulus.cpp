@@ -6,11 +6,11 @@
 #include <iterator>
 
 // SEALNet
-#include "seal/native/src/seal/c/modulus.h"
-#include "seal/native/src/seal/c/utilities.h"
+#include "seal/c/modulus.h"
+#include "seal/c/utilities.h"
 
 // SEAL
-#include "seal/native/src/seal/modulus.h"
+#include "seal/modulus.h"
 
 using namespace std;
 using namespace seal;
