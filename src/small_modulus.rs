@@ -77,12 +77,11 @@ impl TryFrom<u64> for SmallModulus {
     }
 }
 
-#[allow(clippy::from_over_into)]
-impl<'a> TryInto<u64> for &'a SmallModulus {
+impl<'a> TryFrom<&'a SmallModulus> for u64 {
     type Error = crate::small_modulus::ModulusError;
 
-    fn try_into(self) -> Result<u64, Self::Error> {
-        self.value().map_err(|err| -> Self::Error {
+    fn try_from(m: &'a SmallModulus) -> Result<u64, Self::Error> {
+        m.value().map_err(|err| -> Self::Error {
             println!("{:?}", err);
             Self::Error::ConversionError
         })
