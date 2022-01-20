@@ -16,19 +16,11 @@ We generate bindings for Rust using the C wrapper provided by SEAL, and located 
 
 ## Updating
 
-Go to the Github repo, and download `seal` folder to replace current one.
-
-First, we need to work manually to add any potential new file:
-- `build.rs` contains hard coded headers to compile with (generating `wrapper.h` in `seal/c`)
-- `sources.rs` lists sources for native SEAL lib
-- `sources_util.rs` lists sources for util lib
-- `sources_c.rs` lists sources for C wrapper necessary to generate bindings
-
-Generate a new `seal/util/config.h` using `seal/util/config.in` template. Check with previously commented `define`, they may cause trouble when compiling global project. If so, try to comment `define` that appeared with this new version.
-
-Using `cargo build`, compile SEAL and update (if needed) the code in `src` directory.
-
-Then go back to top and try to test to run your global project.
+Run
+``` sh
+git subtree pull --prefix seal https://github.com/microsoft/SEAL.git ref --squash
+```
+where `ref` is the desired remote reference to use for the update.
 
 ## Thread safety
 
@@ -36,11 +28,11 @@ It seems that the Seal library is:
 - thread safe for operations (add, rotate, mul, ...)
 - **not** thread safe for object creation (Context, Encoder, Params, ...)
 
-## Using 
+## Using
 
 The best is to look at the test files, particularly the one building the table below.
 
-## Speed Benchmarks 
+## Speed Benchmarks
 A few stats on what can be achieved with BFV
 
 ```
@@ -104,25 +96,25 @@ The sizes indicated are those after zip compression.
 | ------- | ------- || ------- | ---------- || ------- | ---------- || ------ |
 | deg. | bits |  | noise | size(kb) |  | noise | size(kb) |  | gain |
 | ---- | ---- ||-------|----------||-------|----------||------|
-|  8192 |    23 ||    29 |      417 ||    12 |      103 ||  76% | 
+|  8192 |    23 ||    29 |      417 ||    12 |      103 ||  76% |
 | 16384 | 23  |  | 36 | 1822 |  | 17 | 225 |  | 88% |
 | ----- | --- ||-------|----------||-------|----------||------|
-|  8192 |    24 ||    23 |      417 ||    11 |      103 ||  76% | 
+|  8192 |    24 ||    23 |      417 ||    11 |      103 ||  76% |
 | 16384 | 24  |  | 16 | 1822 |  | 15 | 225 |  | 88% |
 | ----- | --- ||-------|----------||-------|----------||------|
-|  8192 |    25 ||    19 |      417 ||    10 |      103 ||  76% | 
+|  8192 |    25 ||    19 |      417 ||    10 |      103 ||  76% |
 | 16384 | 25  |  | 4 | 1822 |  | 4 | 226 |  | 88% |
 | ----- | --- ||-------|----------||-------|----------||------|
-|  8192 |    26 ||    20 |      417 ||     9 |      103 ||  76% | 
+|  8192 |    26 ||    20 |      417 ||     9 |      103 ||  76% |
 | 16384 | 26  |  | 1 | 1822 |  | 1 | 225 |  | 88% |
 | ----- | --- ||-------|----------||-------|----------||------|
-|  8192 |    27 ||    15 |      417 ||     8 |      103 ||  76% | 
+|  8192 |    27 ||    15 |      417 ||     8 |      103 ||  76% |
 | 16384 | 27  |  | 38 | 1822 |  | 13 | 225 |  | 88% |
 | ----- | --- ||-------|----------||-------|----------||------|
-|  8192 |    28 ||     6 |      417 ||     6 |      103 ||  76% | 
+|  8192 |    28 ||     6 |      417 ||     6 |      103 ||  76% |
 | 16384 | 28  |  | 33 | 1822 |  | 12 | 226 |  | 88% |
 | ----- | --- ||-------|----------||-------|----------||------|
-|  8192 |    29 ||     6 |      417 ||     5 |      103 ||  76% | 
+|  8192 |    29 ||     6 |      417 ||     5 |      103 ||  76% |
 | 16384 | 29  |  | 35 | 1822 |  | 11 | 225 |  | 88% |
 | ----- | --- ||-------|----------||-------|----------||------|
 ```
