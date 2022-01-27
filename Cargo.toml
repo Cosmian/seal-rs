@@ -1,5 +1,5 @@
 [package]
-name = "rust-seal"
+name = "seal-rs"
 version = "0.1.0"
 authors = ["Bruno Grieder <bruno.grieder@cosmian.com>"]
 edition = "2021"

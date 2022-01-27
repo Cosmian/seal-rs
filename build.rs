@@ -61,7 +61,6 @@ fn main() {
     // link the SEALC lib
     println!("cargo:rustc-link-search=native={}/lib", dst.display());
     println!("cargo:rustc-link-lib=sealc");
-
 }
 
 fn process_header(header_file: &str) -> String {
