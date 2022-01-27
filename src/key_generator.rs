@@ -215,6 +215,12 @@ impl RelinearizationKeys {
     }
 }
 
+impl PartialEq for RelinearizationKeys {
+    fn eq(&self, other: &RelinearizationKeys) -> bool {
+        self.ptr == other.ptr
+    }
+}
+
 impl TryInto<Vec<u8>> for RelinearizationKeys {
     type Error = Error;
 

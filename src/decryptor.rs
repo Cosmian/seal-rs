@@ -44,7 +44,7 @@ impl Decryptor {
     pub fn decrypt(&self, cipher_text: &Ciphertext) -> Result<Plaintext> {
         let pt = Plaintext::create_in_pool_of_cipher_text(cipher_text)?;
         let ret = unsafe { Decryptor_Decrypt(self.ptr, cipher_text.ptr(), pt.ptr()) };
-        anyhow::ensure!(ret == 0, "Error decrypting");
+        anyhow::ensure!(ret == 0, "Error decrypting ({})", ret);
         Ok(pt)
     }
 

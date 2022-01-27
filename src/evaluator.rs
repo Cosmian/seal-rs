@@ -270,6 +270,12 @@ impl Evaluator {
     }
 }
 
+impl PartialEq<Evaluator> for Evaluator {
+    fn eq(&self, other: &Evaluator) -> bool {
+        self.ptr == other.ptr
+    }
+}
+
 impl Drop for Evaluator {
     fn drop(&mut self) {
         unsafe {

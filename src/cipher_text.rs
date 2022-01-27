@@ -133,7 +133,7 @@ impl Ciphertext {
         Ok(Ciphertext { ptr })
     }
 
-    pub fn size(&self) -> Result<u64> {
+    pub fn size(&self) -> Result<usize> {
         let mut size: u64 = 0;
         let ret = unsafe { Ciphertext_Size(self.ptr(), &mut size) };
         anyhow::ensure!(
@@ -141,7 +141,26 @@ impl Ciphertext {
             "Error getting the cipher text size: {}",
             std::io::Error::last_os_error()
         );
-        Ok(size)
+        Ok(size as usize)
+    }
+
+    pub fn get_poly_modulus_degree(&self) -> Result<usize> {
+        let mut n: u64 = 0;
+        let ret = unsafe { Ciphertext_PolyModulusDegree(self.ptr(), &mut n) };
+        anyhow::ensure!(ret == 0, "Error getting the polymodulus degree",);
+        Ok(n as usize)
+    }
+
+    pub fn get_coeff_modulus_size(&self) -> Result<usize> {
+        let mut k: u64 = 0;
+        let ret = unsafe { Ciphertext_CoeffModulusSize(self.ptr(), &mut k) };
+        anyhow::ensure!(ret == 0, "Error getting the coeff modulus size",);
+        // TODO: why is it not equal to parms.get_coeff_modulus().size() ?
+        Ok(k as usize)
+    }
+
+    pub fn poly_size(&self) -> Result<usize> {
+        Ok(self.get_coeff_modulus_size()? * self.get_poly_modulus_degree()?)
     }
 
     pub fn scale(&self) -> Result<f64> {
@@ -162,6 +181,43 @@ impl Ciphertext {
         let ret = unsafe { Ciphertext_ParmsId(self.ptr(), parms_id.as_mut_ptr()) };
         anyhow::ensure!(ret == 0, "Error getting the parms id");
         Ok(parms_id)
+    }
+
+    pub fn get_raw(&self) -> Result<Vec<u64>> {
+        // allocate the right amount of space
+        // be carreful to set the length to the capacity
+        let (size, coeff_modulus_size, poly_modulus_degree) = (
+            self.size()?,
+            self.get_coeff_modulus_size()?,
+            self.get_poly_modulus_degree()?,
+        );
+
+        (0..size * coeff_modulus_size * poly_modulus_degree)
+            .map(|index| -> Result<u64> {
+                let mut coeff = 0;
+                let ret = unsafe { Ciphertext_GetDataAt1(self.ptr(), index as u64, &mut coeff) };
+                anyhow::ensure!(
+                    ret == 0,
+                    "Could not get coefficient {} from the given ciphertext ({})!",
+                    index,
+                    ret
+                );
+                Ok(coeff)
+            })
+            .collect()
+    }
+
+    pub fn set_raw(&self, polynomials: Vec<u64>) -> Result<()> {
+        for (index, coeff) in polynomials.iter().enumerate() {
+            let ret = unsafe { Ciphertext_SetDataAt(self.ptr(), index as u64, *coeff) };
+            anyhow::ensure!(
+                ret == 0,
+                "Could not set polynomial on index {} of the given ciphertext: {}",
+                index,
+                std::io::Error::last_os_error()
+            );
+        }
+        Ok(())
     }
 }
 

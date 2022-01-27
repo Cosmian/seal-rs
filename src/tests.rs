@@ -1,7 +1,6 @@
-use std::time::Instant;
-
 use anyhow::Result;
 use rand::{thread_rng, Rng};
+use std::time::Instant;
 use tracing::debug;
 
 use super::*;
@@ -1060,5 +1059,92 @@ fn test_mod_switch_to_next() -> Result<()> {
         }
         debug!("|-------|-------||-------|----------||-------|----------||------|");
     }
+    Ok(())
+}
+
+fn add_polynomials(
+    a: &[u64],
+    b: &[u64],
+    modulus: &[u64],
+    size: usize,
+    coeff_modulus_size: usize,
+    poly_modulus_degree: usize,
+) -> Result<Vec<u64>> {
+    anyhow::ensure!(
+        a.len() == b.len(),
+        "Cannot add polynomials with different sizes!"
+    );
+    let mut res = Vec::with_capacity(a.len());
+    let mut index = 0;
+    for _ in 0..size {
+        for prime in modulus.iter().take(coeff_modulus_size) {
+            println!("{}", prime);
+            for _ in 0..poly_modulus_degree {
+                res.push((a[index] + b[index]) % prime);
+                index += 1;
+            }
+        }
+    }
+    println!("{:?}", res);
+    Ok(res)
+}
+
+#[test]
+fn test_get_polynomial() -> Result<()> {
+    let params = Params::create(SCHEME_BFV)?;
+    let security_level = 128u8;
+    let poly_modulus_degree = 4096;
+    params.set_poly_modulus_degree(poly_modulus_degree)?;
+    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
+    let modulus = params
+        .bfv_default(security_level)?
+        .iter()
+        .map(|small_modulus| {
+            u64::try_from(small_modulus).map_err(|err| {
+                anyhow::eyre!("Error while converting SmallModulus into u64: {:?}", err)
+            })
+        })
+        .collect::<Result<Vec<u64>>>()?;
+
+    params.set_plain_modulus(1024)?;
+    let context = Context::create(params, security_level, true)?;
+    // Key Generation
+    let key_generator = KeyGenerator::create(&context)?;
+    let public_key = key_generator.public_key()?;
+    let secret_key = key_generator.secret_key()?;
+    // encryption // decryption
+    let encryptor = Encryptor::create(&context, &public_key, &secret_key)?;
+    let decryptor = Decryptor::create(&context, &secret_key)?;
+    // create a constant plain text in the thread local memory pool
+    let value_a = 6u64;
+    let plain_text_a = Plaintext::create_constant(value_a)?;
+    let cipher_text_a = encryptor.encrypt(&plain_text_a)?;
+    let value_b = 7u64;
+    let plain_text_b = Plaintext::create_constant(value_b)?;
+    let cipher_text_b = encryptor.encrypt(&plain_text_b)?;
+
+    let a = cipher_text_a.get_raw()?;
+    let b = cipher_text_b.get_raw()?;
+
+    let c = add_polynomials(
+        &a,
+        &b,
+        &modulus,
+        cipher_text_a.size()?,
+        cipher_text_a.get_coeff_modulus_size()?,
+        cipher_text_a.get_poly_modulus_degree()?,
+    )?;
+
+    cipher_text_a.set_raw(c)?;
+
+    // check the encryption
+    let recovered_a = decryptor.decrypt(&cipher_text_a)?;
+    let expected_res = value_a + value_b;
+    anyhow::ensure!(
+        expected_res == recovered_a.coeff_at(0)?,
+        "Wrong decryption: {} != {}",
+        recovered_a.coeff_at(0)?,
+        expected_res,
+    );
     Ok(())
 }
