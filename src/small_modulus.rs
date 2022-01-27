@@ -81,10 +81,8 @@ impl<'a> TryFrom<&'a SmallModulus> for u64 {
     type Error = crate::small_modulus::ModulusError;
 
     fn try_from(m: &'a SmallModulus) -> Result<u64, Self::Error> {
-        m.value().map_err(|err| -> Self::Error {
-            println!("{:?}", err);
-            Self::Error::ConversionError
-        })
+        m.value()
+            .map_err(|_| -> Self::Error { Self::Error::ConversionError })
     }
 }
 

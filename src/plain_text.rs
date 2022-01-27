@@ -185,10 +185,7 @@ impl TryFrom<Vec<u64>> for Plaintext {
     type Error = PlainTextError;
 
     fn try_from(v: Vec<u64>) -> Result<Self, Self::Error> {
-        let p = Plaintext::create().map_err(|err| {
-            println!("{}", err);
-            Self::Error::Creation
-        })?;
+        let p = Plaintext::create().map_err(|_| Self::Error::Creation)?;
         let ret = unsafe { Plaintext_Set4(p.ptr(), v.len() as u64, &v[0] as *const _ as *mut _) };
         match ret {
             0 => Ok(p),
@@ -201,16 +198,10 @@ impl TryFrom<Plaintext> for Vec<u64> {
     type Error = PlainTextError;
 
     fn try_from(value: Plaintext) -> Result<Self, Self::Error> {
-        (0..value.coeffs_count().map_err(|err| {
-            println!("{}", err);
-            Self::Error::GetCoeffCount
-        })?)
-            .map(|i| {
-                value.coeff_at(i).map_err(|err| {
-                    println!("{}", err);
-                    Self::Error::GetCoeffCount
-                })
-            })
+        (0..value
+            .coeffs_count()
+            .map_err(|_| Self::Error::GetCoeffCount)?)
+            .map(|i| value.coeff_at(i).map_err(|_| Self::Error::GetCoeffCount))
             .collect()
     }
 }

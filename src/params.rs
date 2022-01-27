@@ -60,7 +60,6 @@ impl Params {
             if ret == 0 {
                 return Ok(Params { ptr });
             }
-            println!("Retry params...");
             retry -= 1;
         }
         anyhow::bail!(
