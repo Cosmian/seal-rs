@@ -1,8 +1,6 @@
-use std::os::raw::*;
-
-use anyhow::Result;
-
 use crate::{params::Params, seal_bindings::*};
+use anyhow::Result;
+use std::os::raw::*;
 
 pub struct Context {
     ptr: *mut ::std::os::raw::c_void,
@@ -15,25 +13,50 @@ pub struct Context {
 
 impl Context {
     pub fn create(params: Params, security_level: u8, expand_mod_chain: bool) -> Result<Context> {
-        let mut ptr: *mut c_void = std::ptr::null_mut();
-        let ret = unsafe {
+        let mut ptr = std::ptr::null_mut();
+        unsafe {
+            // `ret` is always 0 here
             SEALContext_Create(
                 params.ptr(),
                 if expand_mod_chain { 1 } else { 0 },
                 security_level as i32,
                 &mut ptr,
-            )
+            );
         };
-        anyhow::ensure!(
-            ret == 0,
-            "Error creating the context with security level {}",
-            security_level
-        );
-        Ok(Context {
+
+        let context = Context {
             ptr,
             params,
             security_level,
-        })
+        };
+
+        // Check if there is a parameter error
+        let (err, msg) = (context.get_error_name(), context.get_error_msg());
+        if err != "success" || msg != "valid" {
+            anyhow::bail!("Error {}: {}", err, msg);
+        } else {
+            Ok(context)
+        }
+    }
+
+    pub fn get_error_name(&self) -> String {
+        let mut length: u64 = 0;
+        let mut buf = vec![0_u8; 512];
+        unsafe {
+            SEALContext_ParameterErrorName(self.ptr, buf.as_mut_ptr() as *mut i8, &mut length);
+        }
+        buf.resize(length as usize, 0_u8);
+        String::from_utf8_lossy(&buf).to_string()
+    }
+
+    pub fn get_error_msg(&self) -> String {
+        let mut length: u64 = 0;
+        let mut buf = vec![0_u8; 512];
+        unsafe {
+            SEALContext_ParameterErrorMessage(self.ptr, buf.as_mut_ptr() as *mut i8, &mut length);
+        }
+        buf.resize(length as usize, 0_u8);
+        String::from_utf8_lossy(&buf).to_string()
     }
 
     pub(crate) fn ptr(&self) -> *mut c_void {
