@@ -42,7 +42,7 @@ impl Decryptor {
     /// @throws std::invalid_argument if encrypted is not in the default NTT
     /// form
     pub fn decrypt(&self, cipher_text: &Ciphertext) -> Result<Plaintext> {
-        let pt = Plaintext::create_in_pool_of_cipher_text(&cipher_text)?;
+        let pt = Plaintext::create_in_pool_of_cipher_text(cipher_text)?;
         let ret = unsafe { Decryptor_Decrypt(self.ptr, cipher_text.ptr(), pt.ptr()) };
         anyhow::ensure!(ret == 0, "Error decrypting");
         Ok(pt)

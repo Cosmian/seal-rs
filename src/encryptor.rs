@@ -33,7 +33,7 @@ impl Encryptor {
         plain_text: &Plaintext,
         // memory_pool_handle: &MemoryPool,
     ) -> Result<Ciphertext> {
-        let ct = Ciphertext::create_in_pool_of_plain_text(&plain_text)?;
+        let ct = Ciphertext::create_in_pool_of_plain_text(plain_text)?;
         let mut mem_pool_ptr: *mut c_void = std::ptr::null_mut();
         let ret = unsafe { Ciphertext_Pool(ct.ptr(), &mut mem_pool_ptr) };
         anyhow::ensure!(ret == 0, "Error fetching the cipher text memory pool");

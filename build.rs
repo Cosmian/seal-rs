@@ -61,11 +61,9 @@ fn main() {
     // link the SEALC lib
     println!("cargo:rustc-link-search=native={}/lib", dst.display());
     println!("cargo:rustc-link-lib=sealc");
-
 }
 
 fn process_header(header_file: &str) -> String {
-    // println!("Processing header of {}", header_file);
     let file = File::open(header_file).unwrap();
     let mut reader = BufReader::new(file);
     let mut s = String::new();

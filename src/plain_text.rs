@@ -1,14 +1,19 @@
-use std::os::raw::*;
-
-use anyhow::Result;
-
 use crate::{
     cipher_text::Ciphertext, context::Context, memory_pool_handle::MemoryPoolHandle,
     seal_bindings::*,
 };
+use anyhow::Result;
+use std::os::raw::*;
 
 pub struct Plaintext {
     ptr: *mut c_void,
+}
+
+#[derive(Debug)]
+pub enum PlainTextError {
+    Creation,
+    GetCoeff,
+    GetCoeffCount,
 }
 
 impl Plaintext {
@@ -171,6 +176,31 @@ impl Plaintext {
             std::io::Error::last_os_error()
         );
         Ok(Plaintext { ptr })
+    }
+}
+
+impl<'a> TryFrom<&'a [u64]> for Plaintext {
+    type Error = PlainTextError;
+
+    fn try_from(v: &'a [u64]) -> Result<Self, Self::Error> {
+        let p = Plaintext::create().map_err(|_| Self::Error::Creation)?;
+        let ret = unsafe { Plaintext_Set4(p.ptr(), v.len() as u64, &v[0] as *const _ as *mut _) };
+        match ret {
+            0 => Ok(p),
+            _ => Err(Self::Error::Creation),
+        }
+    }
+}
+
+impl<'a> TryFrom<&'a Plaintext> for Vec<u64> {
+    type Error = PlainTextError;
+
+    fn try_from(value: &'a Plaintext) -> Result<Self, Self::Error> {
+        (0..value
+            .coeffs_count()
+            .map_err(|_| Self::Error::GetCoeffCount)?)
+            .map(|i| value.coeff_at(i).map_err(|_| Self::Error::GetCoeffCount))
+            .collect()
     }
 }
 

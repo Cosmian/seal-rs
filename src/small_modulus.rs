@@ -5,7 +5,7 @@ use anyhow::Result;
 use crate::seal_bindings::*;
 
 pub struct SmallModulus {
-    ptr: *mut c_void,
+    pub(crate) ptr: *mut c_void,
 }
 
 impl SmallModulus {
@@ -41,11 +41,6 @@ impl SmallModulus {
         );
         Ok(value)
     }
-
-    #[allow(dead_code)]
-    pub(crate) fn ptr(&self) -> *mut c_void {
-        self.ptr
-    }
 }
 
 impl Drop for SmallModulus {
@@ -53,5 +48,58 @@ impl Drop for SmallModulus {
         unsafe {
             Modulus_Destroy(self.ptr);
         }
+    }
+}
+
+#[derive(Debug)]
+#[allow(dead_code)]
+pub enum ModulusError {
+    ConversionError,
+    CreationError,
+}
+
+impl TryFrom<u64> for SmallModulus {
+    type Error = crate::small_modulus::ModulusError;
+
+    fn try_from(value: u64) -> Result<Self, Self::Error> {
+        match value {
+            1 => Err(Self::Error::ConversionError),
+            _ => {
+                let mut res = Self {
+                    ptr: std::ptr::null_mut(),
+                };
+                unsafe {
+                    Modulus_Create1(value, &mut res.ptr);
+                }
+                Ok(res)
+            }
+        }
+    }
+}
+
+impl<'a> TryFrom<&'a SmallModulus> for u64 {
+    type Error = crate::small_modulus::ModulusError;
+
+    fn try_from(m: &'a SmallModulus) -> Result<u64, Self::Error> {
+        m.value()
+            .map_err(|_| -> Self::Error { Self::Error::ConversionError })
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use anyhow::Result;
+
+    #[test]
+    fn test_modulus() -> Result<()> {
+        let m = 256;
+        anyhow::ensure!(
+            m == (&SmallModulus::try_from(m).expect("Should not fail!"))
+                .try_into()
+                .expect("Should not fail"),
+            "Wrong conversion from u64 to Modulus!"
+        );
+        Ok(())
     }
 }
