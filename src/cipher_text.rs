@@ -23,6 +23,19 @@ impl Ciphertext {
         Ok(Ciphertext { ptr })
     }
 
+    /// Create a `CipherText` in the thread local memory pool
+    pub fn create_with_context(context: &Context) -> Result<Ciphertext> {
+        let mut handle_ptr: *mut c_void = std::ptr::null_mut();
+        let ret = unsafe { MemoryManager_GetPool2(&mut handle_ptr) };
+        anyhow::ensure!(ret == 0, "Error creating the memory pool handle");
+        let mut ptr: *mut c_void = std::ptr::null_mut();
+        // this moves the pointer
+        let ret =
+            unsafe { Ciphertext_Create3(context as *const _ as *mut _, handle_ptr, &mut ptr) };
+        anyhow::ensure!(ret == 0, "Error creating the cipher text");
+        Ok(Ciphertext { ptr })
+    }
+
     pub fn create_in_pool(memory_pool_handle: MemoryPoolHandle) -> Result<Ciphertext> {
         let mut ptr: *mut c_void = std::ptr::null_mut();
         // this moves the pointer
@@ -183,16 +196,39 @@ impl Ciphertext {
         Ok(parms_id)
     }
 
-    pub fn get_raw(&self) -> Result<Vec<u64>> {
-        // allocate the right amount of space
-        // be carreful to set the length to the capacity
-        let (size, coeff_modulus_size, poly_modulus_degree) = (
-            self.size()?,
-            self.get_coeff_modulus_size()?,
-            self.get_poly_modulus_degree()?,
-        );
+    //pub fn get_raw(&self) -> Result<Vec<Vec<u64>>> {
+    //let (size, coeff_modulus_size, poly_modulus_degree) = (
+    //self.size()?,
+    //self.get_coeff_modulus_size()?,
+    //self.get_poly_modulus_degree()?,
+    //);
+    //Ok((0..size)
+    //.map(|i| {
+    //(0..poly_modulus_degree)
+    //.map(|j| -> u64 {
+    //(0..coeff_modulus_size)
+    //.map(|k| {
+    //let mut coeff = 0;
+    //unsafe {
+    //Ciphertext_GetDataAt1(
+    //self.ptr(),
+    //(i * (coeff_modulus_size * poly_modulus_degree)
+    //+ k * poly_modulus_degree
+    //+ j) as u64,
+    //&mut coeff,
+    //)
+    //};
+    //coeff
+    //})
+    //.sum()
+    //})
+    //.collect()
+    //})
+    //.collect())
+    //}
 
-        (0..size * coeff_modulus_size * poly_modulus_degree)
+    pub fn get_raw_rns(&self) -> Result<Vec<u64>> {
+        (0..self.size()? * self.get_coeff_modulus_size()? * self.get_poly_modulus_degree()?)
             .map(|index| -> Result<u64> {
                 let mut coeff = 0;
                 let ret = unsafe { Ciphertext_GetDataAt1(self.ptr(), index as u64, &mut coeff) };
@@ -207,7 +243,7 @@ impl Ciphertext {
             .collect()
     }
 
-    pub fn set_raw(&self, polynomials: Vec<u64>) -> Result<()> {
+    pub fn set_raw_rns(&self, polynomials: Vec<u64>) -> Result<()> {
         for (index, coeff) in polynomials.iter().enumerate() {
             let ret = unsafe { Ciphertext_SetDataAt(self.ptr(), index as u64, *coeff) };
             anyhow::ensure!(
@@ -218,6 +254,20 @@ impl Ciphertext {
             );
         }
         Ok(())
+    }
+
+    pub fn try_add_assign(&self, other: &Self, modulus: &[u64]) -> Result<()> {
+        let (mut a, b) = (self.get_raw_rns()?, other.get_raw_rns()?);
+        let mut index = 0;
+        for _ in 0..self.size()? {
+            for modulus in modulus.iter().take(self.get_coeff_modulus_size()?) {
+                for _ in 0..self.get_poly_modulus_degree()? {
+                    a[index] = (a[index] + b[index]) % modulus;
+                    index += 1;
+                }
+            }
+        }
+        self.set_raw_rns(a)
     }
 }
 
