@@ -3,6 +3,7 @@ use crate::{
     seal_bindings::*,
 };
 use anyhow::Result;
+use core::convert::TryFrom;
 use std::os::raw::*;
 
 pub struct Plaintext {
@@ -52,7 +53,6 @@ impl Plaintext {
         Ok(pt)
     }
 
-    #[allow(dead_code)]
     pub(crate) fn create_in_pool_of_plain_text(other: &Plaintext) -> Result<Plaintext> {
         let mut mem_pool_ptr: *mut c_void = std::ptr::null_mut();
         // this call creates a new object which is

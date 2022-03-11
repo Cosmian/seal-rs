@@ -1,3 +1,4 @@
+use core::convert::TryFrom;
 use std::os::raw::*;
 
 use anyhow::Result;
@@ -52,7 +53,6 @@ impl Drop for SmallModulus {
 }
 
 #[derive(Debug)]
-#[allow(dead_code)]
 pub enum ModulusError {
     ConversionError,
     CreationError,
@@ -90,6 +90,7 @@ impl<'a> TryFrom<&'a SmallModulus> for u64 {
 mod test {
     use super::*;
     use anyhow::Result;
+    use core::convert::TryInto;
 
     #[test]
     fn test_modulus() -> Result<()> {
