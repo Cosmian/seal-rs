@@ -164,7 +164,7 @@ impl Ciphertext {
         Ok(n as usize)
     }
 
-    pub fn get_coeff_modulus_size(&self) -> Result<usize> {
+    pub fn get_coeff_modulus_length(&self) -> Result<usize> {
         let mut k: u64 = 0;
         let ret = unsafe { Ciphertext_CoeffModulusSize(self.ptr(), &mut k) };
         anyhow::ensure!(ret == 0, "Error getting the coeff modulus size",);
@@ -173,7 +173,7 @@ impl Ciphertext {
     }
 
     pub fn poly_size(&self) -> Result<usize> {
-        Ok(self.get_coeff_modulus_size()? * self.get_poly_modulus_degree()?)
+        Ok(self.get_coeff_modulus_length()? * self.get_poly_modulus_degree()?)
     }
 
     pub fn scale(&self) -> Result<f64> {
@@ -196,39 +196,15 @@ impl Ciphertext {
         Ok(parms_id)
     }
 
-    //pub fn get_raw(&self) -> Result<Vec<Vec<u64>>> {
-    //let (size, coeff_modulus_size, poly_modulus_degree) = (
-    //self.size()?,
-    //self.get_coeff_modulus_size()?,
-    //self.get_poly_modulus_degree()?,
-    //);
-    //Ok((0..size)
-    //.map(|i| {
-    //(0..poly_modulus_degree)
-    //.map(|j| -> u64 {
-    //(0..coeff_modulus_size)
-    //.map(|k| {
-    //let mut coeff = 0;
-    //unsafe {
-    //Ciphertext_GetDataAt1(
-    //self.ptr(),
-    //(i * (coeff_modulus_size * poly_modulus_degree)
-    //+ k * poly_modulus_degree
-    //+ j) as u64,
-    //&mut coeff,
-    //)
-    //};
-    //coeff
-    //})
-    //.sum()
-    //})
-    //.collect()
-    //})
-    //.collect())
-    //}
-
+    /// Get the raw RNS data structure. It consists of a vector of `u64` of
+    /// length `size * coeff_modulus_length * poly_modulus_degree`.
+    ///
+    /// Indeed, a SEAL ciphertext consists in `size` polynomials. Each of these
+    /// polynomials have `poly_modulus_degree` coefficients. And each
+    /// coefficient is stored in its RNS representation which is a vector of
+    /// length the number of primes in the factorisation of the `coeff_modulus`
     pub fn get_raw_rns(&self) -> Result<Vec<u64>> {
-        (0..self.size()? * self.get_coeff_modulus_size()? * self.get_poly_modulus_degree()?)
+        (0..self.size()? * self.get_coeff_modulus_length()? * self.get_poly_modulus_degree()?)
             .map(|index| -> Result<u64> {
                 let mut coeff = 0;
                 let ret = unsafe { Ciphertext_GetDataAt1(self.ptr(), index as u64, &mut coeff) };
@@ -243,6 +219,13 @@ impl Ciphertext {
             .collect()
     }
 
+    /// Set the ciphertext value to the given raw RNS reprensentation of its
+    /// polynomials.
+    ///
+    /// A SEAL ciphertext consists in `size` polynomials. Each of these
+    /// polynomials have `poly_modulus_degree` coefficients. And each
+    /// coefficient is stored in its RNS representation which is a vector of
+    /// length the number of primes in the factorisation of the `coeff_modulus`
     pub fn set_raw_rns(&self, polynomials: Vec<u64>) -> Result<()> {
         for (index, coeff) in polynomials.iter().enumerate() {
             let ret = unsafe { Ciphertext_SetDataAt(self.ptr(), index as u64, *coeff) };
@@ -260,7 +243,7 @@ impl Ciphertext {
         let (mut a, b) = (self.get_raw_rns()?, other.get_raw_rns()?);
         let mut index = 0;
         for _ in 0..self.size()? {
-            for modulus in modulus.iter().take(self.get_coeff_modulus_size()?) {
+            for modulus in modulus.iter().take(self.get_coeff_modulus_length()?) {
                 for _ in 0..self.get_poly_modulus_degree()? {
                     a[index] = (a[index] + b[index]) % modulus;
                     index += 1;
