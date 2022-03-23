@@ -1,7 +1,6 @@
-use std::time::Instant;
-
 use anyhow::Result;
 use rand::{thread_rng, Rng};
+use std::time::Instant;
 use tracing::debug;
 
 use super::*;
@@ -270,7 +269,7 @@ fn test_bgv_simple() -> Result<()> {
     let security_level = 128u8;
     params.set_poly_modulus_degree(4096)?;
     assert_eq!(4096, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
+    params.set_coeff_modulus(&params.bfv_default(security_level)?)?;
     params.set_plain_modulus(1024)?;
     let context = Context::create(params, security_level, true)?;
     // Key Generation
@@ -341,7 +340,7 @@ fn test_bgv_batch_encoder() -> Result<()> {
     let poly_modulus_degree = 4096usize;
     params.set_poly_modulus_degree(poly_modulus_degree)?;
     assert_eq!(poly_modulus_degree, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
+    params.set_coeff_modulus(&params.bfv_default(security_level)?)?;
     // create a modulus for batching
     let plain_modulus = SmallModulus::for_batching(poly_modulus_degree, 20)?.value()?;
     params.set_plain_modulus(plain_modulus)?;
@@ -789,7 +788,7 @@ fn test_serialization() -> Result<()> {
     let security_level = 128u8;
     params.set_poly_modulus_degree(4096)?;
     assert_eq!(4096, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
+    params.set_coeff_modulus(&params.bfv_default(security_level)?)?;
     params.set_plain_modulus(1024)?;
     let context = Context::create(params, security_level, true)?;
     // Key Generation
@@ -819,7 +818,7 @@ fn test_serialization() -> Result<()> {
     let security_level = 128u8;
     params.set_poly_modulus_degree(4096)?;
     assert_eq!(4096, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
+    params.set_coeff_modulus(&params.bfv_default(security_level)?)?;
     params.set_plain_modulus(1024)?;
     let recovered_context = Context::create(params, security_level, true)?;
     // Operations on cipher text - create an evaluator
@@ -881,7 +880,7 @@ fn test_noise_budget() -> Result<()> {
             let params = Params::create(SCHEME_BFV)?;
             params.set_poly_modulus_degree(poly_modulus_degree)?;
             assert_eq!(poly_modulus_degree, params.get_poly_modulus_degree()?);
-            params.set_coeff_modulus(params.bfv_default(security_level)?)?;
+            params.set_coeff_modulus(&params.bfv_default(security_level)?)?;
             params.set_plain_modulus(plain_modulus)?;
             let context = Context::create(params, security_level, true)?;
 
@@ -972,7 +971,7 @@ fn test_set_params_bfv() -> Result<()> {
     let params = Params::create(SCHEME_BFV)?;
     params.set_poly_modulus_degree(poly_modulus_degree)?;
     assert_eq!(poly_modulus_degree, params.get_poly_modulus_degree()?);
-    params.set_coeff_modulus(params.bfv_default(security_level)?)?;
+    params.set_coeff_modulus(&params.bfv_default(security_level)?)?;
     Ok(())
 }
 
@@ -1001,7 +1000,7 @@ fn test_mod_switch_to_next() -> Result<()> {
 
             let params = Params::create(SCHEME_BFV)?;
             params.set_poly_modulus_degree(poly_modulus_degree)?;
-            params.set_coeff_modulus(params.bfv_default(security_level)?)?;
+            params.set_coeff_modulus(&params.bfv_default(security_level)?)?;
             params.set_plain_modulus(plain_modulus)?;
             let context = Context::create(params, security_level, true)?;
 
@@ -1060,5 +1059,52 @@ fn test_mod_switch_to_next() -> Result<()> {
         }
         debug!("|-------|-------||-------|----------||-------|----------||------|");
     }
+    Ok(())
+}
+
+#[test]
+fn test_try_add_assign() -> Result<()> {
+    let params = Params::create(SCHEME_BFV)?;
+    let security_level = 128u8;
+    let poly_modulus_degree = 4096;
+    params.set_poly_modulus_degree(poly_modulus_degree)?;
+    params.set_coeff_modulus(&params.bfv_default(security_level)?)?;
+    let modulus = params
+        .bfv_default(security_level)?
+        .iter()
+        .map(|small_modulus| {
+            u64::try_from(small_modulus).map_err(|err| {
+                anyhow::eyre!("Error while converting SmallModulus into u64: {:?}", err)
+            })
+        })
+        .collect::<Result<Vec<u64>>>()?;
+
+    params.set_plain_modulus(1024)?;
+    let context = Context::create(params, security_level, true)?;
+    // Key Generation
+    let key_generator = KeyGenerator::create(&context)?;
+    let public_key = key_generator.public_key()?;
+    let secret_key = key_generator.secret_key()?;
+    // encryption // decryption
+    let encryptor = Encryptor::create(&context, &public_key, &secret_key)?;
+    let decryptor = Decryptor::create(&context, &secret_key)?;
+    // create a constant plain text in the thread local memory pool
+    let value_a = 6u64;
+    let plain_text_a = Plaintext::create_constant(value_a)?;
+    let cipher_text_a = encryptor.encrypt(&plain_text_a)?;
+    let value_b = 7u64;
+    let plain_text_b = Plaintext::create_constant(value_b)?;
+    let cipher_text_b = encryptor.encrypt(&plain_text_b)?;
+    cipher_text_a.try_add_assign(&cipher_text_b, &modulus)?;
+
+    // check the encryption
+    let recovered_a = decryptor.decrypt(&cipher_text_a)?;
+    let expected_res = value_a + value_b;
+    anyhow::ensure!(
+        expected_res == recovered_a.coeff_at(0)?,
+        "Wrong decryption: {} != {}",
+        recovered_a.coeff_at(0)?,
+        expected_res,
+    );
     Ok(())
 }

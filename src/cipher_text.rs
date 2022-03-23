@@ -23,6 +23,19 @@ impl Ciphertext {
         Ok(Ciphertext { ptr })
     }
 
+    /// Create a `CipherText` in the thread local memory pool
+    pub fn create_with_context(context: &Context) -> Result<Ciphertext> {
+        let mut handle_ptr: *mut c_void = std::ptr::null_mut();
+        let ret = unsafe { MemoryManager_GetPool2(&mut handle_ptr) };
+        anyhow::ensure!(ret == 0, "Error creating the memory pool handle");
+        let mut ptr: *mut c_void = std::ptr::null_mut();
+        // this moves the pointer
+        let ret =
+            unsafe { Ciphertext_Create3(context as *const _ as *mut _, handle_ptr, &mut ptr) };
+        anyhow::ensure!(ret == 0, "Error creating the cipher text");
+        Ok(Ciphertext { ptr })
+    }
+
     pub fn create_in_pool(memory_pool_handle: MemoryPoolHandle) -> Result<Ciphertext> {
         let mut ptr: *mut c_void = std::ptr::null_mut();
         // this moves the pointer
@@ -133,7 +146,7 @@ impl Ciphertext {
         Ok(Ciphertext { ptr })
     }
 
-    pub fn size(&self) -> Result<u64> {
+    pub fn size(&self) -> Result<usize> {
         let mut size: u64 = 0;
         let ret = unsafe { Ciphertext_Size(self.ptr(), &mut size) };
         anyhow::ensure!(
@@ -141,7 +154,26 @@ impl Ciphertext {
             "Error getting the cipher text size: {}",
             std::io::Error::last_os_error()
         );
-        Ok(size)
+        Ok(size as usize)
+    }
+
+    pub fn get_poly_modulus_degree(&self) -> Result<usize> {
+        let mut n: u64 = 0;
+        let ret = unsafe { Ciphertext_PolyModulusDegree(self.ptr(), &mut n) };
+        anyhow::ensure!(ret == 0, "Error getting the polymodulus degree",);
+        Ok(n as usize)
+    }
+
+    pub fn get_coeff_modulus_length(&self) -> Result<usize> {
+        let mut k: u64 = 0;
+        let ret = unsafe { Ciphertext_CoeffModulusSize(self.ptr(), &mut k) };
+        anyhow::ensure!(ret == 0, "Error getting the coeff modulus size",);
+        // TODO: why is it not equal to parms.get_coeff_modulus().size() ?
+        Ok(k as usize)
+    }
+
+    pub fn poly_size(&self) -> Result<usize> {
+        Ok(self.get_coeff_modulus_length()? * self.get_poly_modulus_degree()?)
     }
 
     pub fn scale(&self) -> Result<f64> {
@@ -162,6 +194,63 @@ impl Ciphertext {
         let ret = unsafe { Ciphertext_ParmsId(self.ptr(), parms_id.as_mut_ptr()) };
         anyhow::ensure!(ret == 0, "Error getting the parms id");
         Ok(parms_id)
+    }
+
+    /// Get the raw RNS data structure. It consists of a vector of `u64` of
+    /// length `size * coeff_modulus_length * poly_modulus_degree`.
+    ///
+    /// Indeed, a SEAL ciphertext consists in `size` polynomials. Each of these
+    /// polynomials have `poly_modulus_degree` coefficients. And each
+    /// coefficient is stored in its RNS representation which is a vector of
+    /// length the number of primes in the factorisation of the `coeff_modulus`
+    pub fn get_raw_rns(&self) -> Result<Vec<u64>> {
+        (0..self.size()? * self.get_coeff_modulus_length()? * self.get_poly_modulus_degree()?)
+            .map(|index| -> Result<u64> {
+                let mut coeff = 0;
+                let ret = unsafe { Ciphertext_GetDataAt1(self.ptr(), index as u64, &mut coeff) };
+                anyhow::ensure!(
+                    ret == 0,
+                    "Could not get coefficient {} from the given ciphertext ({})!",
+                    index,
+                    ret
+                );
+                Ok(coeff)
+            })
+            .collect()
+    }
+
+    /// Set the ciphertext value to the given raw RNS representation of its
+    /// polynomials.
+    ///
+    /// A SEAL ciphertext consists in `size` polynomials. Each of these
+    /// polynomials have `poly_modulus_degree` coefficients. And each
+    /// coefficient is stored in its RNS representation which is a vector of
+    /// length the number of primes in the factorisation of the `coeff_modulus`
+    pub fn set_raw_rns(&self, polynomials: Vec<u64>) -> Result<()> {
+        for (index, coeff) in polynomials.iter().enumerate() {
+            let ret = unsafe { Ciphertext_SetDataAt(self.ptr(), index as u64, *coeff) };
+            anyhow::ensure!(
+                ret == 0,
+                "Could not set polynomial on index {} of the given ciphertext: {}",
+                index,
+                std::io::Error::last_os_error()
+            );
+        }
+        Ok(())
+    }
+
+    pub fn try_add_assign(&self, other: &Self, modulus: &[u64]) -> Result<()> {
+        let (mut a, b) = (self.get_raw_rns()?, other.get_raw_rns()?);
+        let mut index = 0;
+        for _ in 0..self.size()? {
+            for modulus in modulus.iter().take(self.get_coeff_modulus_length()?) {
+                for _ in 0..self.get_poly_modulus_degree()? {
+                    a[index] = (a[index] + b[index]) % modulus;
+                    index += 1;
+                }
+            }
+        }
+        self.set_raw_rns(a)
     }
 }
 

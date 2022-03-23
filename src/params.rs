@@ -148,7 +148,7 @@ impl Params {
     ///
     ///    For example, if poly_modulus_degree is 4096, the coeff_modulus could
     /// consist    of three 36-bit primes (108 bits).
-    pub fn set_coeff_modulus(&self, primes: Vec<SmallModulus>) -> Result<()> {
+    pub fn set_coeff_modulus(&self, primes: &[SmallModulus]) -> Result<()> {
         let mut coeffs: Vec<*mut c_void> = primes.iter().map(|prime| prime.ptr).collect();
         // set the coeff modulus
         let ret = unsafe {
