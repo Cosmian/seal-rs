@@ -219,7 +219,7 @@ impl Ciphertext {
             .collect()
     }
 
-    /// Set the ciphertext value to the given raw RNS reprensentation of its
+    /// Set the ciphertext value to the given raw RNS representation of its
     /// polynomials.
     ///
     /// A SEAL ciphertext consists in `size` polynomials. Each of these
