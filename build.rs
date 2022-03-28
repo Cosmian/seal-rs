@@ -56,11 +56,14 @@ fn main() {
 
     let dst = cmake::Config::new("seal")
         .define("SEAL_BUILD_SEAL_C", "ON")
+        .define("SEAL_BUILD_STATIC_SEAL_C", "ON")
         .build();
 
     // link the SEALC lib
     println!("cargo:rustc-link-search=native={}/lib", dst.display());
-    println!("cargo:rustc-link-lib=sealc");
+    println!("cargo:rustc-link-lib=static=seal-3.7");
+    println!("cargo:rustc-link-lib=static=sealc-3.7");
+    println!("cargo:rustc-link-lib=dylib=stdc++");
 }
 
 fn process_header(header_file: &str) -> String {
