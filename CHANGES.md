@@ -1,10 +1,86 @@
 # List of Changes
 
+## Version 4.1.1
+
+### Bug Fixes
+
+- Fixed detection of intrinsics on M1 Macs [(PR #597)](https://github.com/microsoft/SEAL/pull/597).
+- Fixed old dependency version numbers in [README.md](README.md) [(PR #596)](https://github.com/microsoft/SEAL/pull/596).
+- Fixed release date typo in [README.md](README.md).
+
+## Version 4.1.0
+
+### Features
+
+- The BGV scheme now keeps ciphertexts in NTT form. BGV ciphertext multiplication is much faster than version 4.0.0.
+- When a BGV ciphertext saved by previous versions is loaded in the current version, it is automatically converted to NTT form.
+- Increased `SEAL_COEFF_MOD_COUNT_MAX`, the maximum number of primes that define the coefficient modulus, from 64 to 256.
+
+### Other Fixes
+
+- Fixed typos [(PR #590)](https://github.com/microsoft/SEAL/pull/590).
+- Added $schema to cgmanifest.json [(PR #558)](https://github.com/microsoft/SEAL/pull/558).
+- Fixed typos [(PR #512)](https://github.com/microsoft/SEAL/pull/512).
+- Fixed typos [(PR #530)](https://github.com/microsoft/SEAL/pull/530).
+- Fixed typos [(PR #509)](https://github.com/microsoft/SEAL/pull/509).
+- Added missing `const` qualifiers [(PR #556)](https://github.com/microsoft/SEAL/pull/556).
+- Added vcpkg installation instructions [(PR #562)](https://github.com/microsoft/SEAL/pull/562).
+- Fixed an issue in specific environments where allocation fails without throwing `std::bad_alloc`.
+- Fixed comments (C++) and C/.NET wrapper implementation of an exception thrown by `invariant_noise_budget`.
+
+### Major API Changes
+
+- Added new public methods `mod_reduce_xxx(...)` (native) and `ModReduceXxx(...)` (dotnet) to the class `Evaluator`.
+
+## Version 4.0.0
+
+### Features
+
+- Added BGV scheme [(PR 283)](https://github.com/microsoft/SEAL/pull/283). Thanks, [Alibaba Gemini Lab](https://alibaba-gemini-lab.github.io/)!
+- Added a new example "BGV basics" to native and dotnet.
+- Loading objects serialized by Microsoft SEAL v3.4+ are supported.
+- Updated versions of dependencies: GoogleTest from 1.10.0 to 1.11.0 and GoogleBenchmark from 1.5.2 to 1.6.0.
+
+### Other Fixes
+
+- Fixed an ambiguous comment [(PR 375)](https://github.com/microsoft/SEAL/pull/375).
+
+### Major API Changes
+
+- Added `seal::scheme_type::bgv`.
+- Added a new public method `parms_id()` (native) to the class `EncryptionParameters`.
+- Added a new public method `Create(...)` (native and dotnet) with three inputs in the class `CoeffModulus`.
+- Added a new public method `correction_factor()` (native) or `CorrectionFactor()` (dotnet) to the class `Ciphertext`.
+- Removed the friendship of the class `EncryptionParameters` to the class `SEALContext`.
+
+### File Changes
+
+- `native/bench/bgv.cpp` is added.
+- Examples are renamed and extended.
+
+## Version 3.7.3
+
+### Features
+
+- All output files including downloaded thirdparty dependencies and Visual Studio project and solution files will be created in the build directory [(PR 427)](https://github.com/microsoft/SEAL/pull/427).
+- Reduced `util::try_minimal_primitive_root` search iterations by half [(PR 430)](https://github.com/microsoft/SEAL/pull/430). Thanks, [zirconium-n](https://github.com/zirconium-n)!
+- Updated .Net SDK version to 6.0.x and supported Visual Studio version to 17 2022.
+- Added `SEAL_AVOID_BRANCHING` option to eleminate branching in critical functions when Microsoft SEAL is built with maliciously inserted compiler flags.
+
+### Bug Fixes
+
+- Removed exceptions in `KeyGenerator::CreateGaloisKeys` when inputs do not include steps so that even when `EncryptionParameterQualifiers::using_batching` is false Galois automorphisms are still available.
+
+### File Changes
+
+- `dotnet/SEALNet.sln` is removed.
+- `dotnet/SEALNet.sln.in` is added.
+
 ## Version 3.7.2
 
 ### Bug Fixes
 
-- Fixed a bug when Intel HEXL is used [(Issue 411)](https://github.com/microsoft/SEAL/issues/411) [(PR414)](https://github.com/microsoft/SEAL/pull/414).
+- Fixed a bug when Intel HEXL is used [(Issue 411)](https://github.com/microsoft/SEAL/issues/411) [(PR 414)](https://github.com/microsoft/SEAL/pull/414).
 - Fixed an abnormal benchmark case due to AVX512 transitions when Intel HEXL is used [(PR 416)](https://github.com/microsoft/SEAL/pull/416).
 
 ## Version 3.7.1
@@ -343,7 +419,7 @@ Instead, the outer lambda function parameter should be wrapped inside another ca
 ### Other
 
 - Added note in [README.md](README.md) about known performance issues when compiling with GNU G++ compared to Clang++ [(Issue 173)](https://github.com/microsoft/SEAL/issues/173).
-- Merged pull requests that improve the performance of keyswitching [(PR #177)](https://github.com/microsoft/SEAL/pull/177) and rescale [(PR #176)](https://github.com/microsoft/SEAL/pull/176) in CKKS.
+- Merged pull requests that improve the performance of keyswitching [(PR 177)](https://github.com/microsoft/SEAL/pull/177) and rescale [(PR 176)](https://github.com/microsoft/SEAL/pull/176) in CKKS.
 
 ## Version 3.5.1
 
