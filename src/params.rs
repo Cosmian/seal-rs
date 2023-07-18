@@ -213,9 +213,9 @@ impl Params {
             poly_modulus_degree != 0,
             "set the polynomials modulus degree first"
         );
-        let mut coeffs = vec![std::ptr::null_mut(); bits_sizes.len() as usize];
+        let mut coeffs = vec![std::ptr::null_mut(); bits_sizes.len()];
         let ret = unsafe {
-            CoeffModulus_Create(
+            CoeffModulus_Create1(
                 poly_modulus_degree as u64,
                 bits_sizes.len() as u64,
                 bits_sizes.as_mut_ptr(),

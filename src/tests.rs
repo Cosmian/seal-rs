@@ -173,7 +173,7 @@ fn test_ckks_valoconso() -> Result<()> {
         }
         // Conso rotate mul
         let conso_day = evaluator.mod_switch_to_next(&conso_encrypted)?;
-        let conso_day_curr = evaluator.rotate(&conso_day, day as i32, &galois_keys)?;
+        let conso_day_curr = evaluator.rotate(&conso_day, day, &galois_keys)?;
         // mul without rescale
         let enc_cost_curr = evaluator.mul(&conso_day_curr, &enc_cost)?;
         // Add

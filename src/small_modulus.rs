@@ -20,7 +20,7 @@ impl SmallModulus {
         let mut ptr: *mut c_void = std::ptr::null_mut();
         let mut bit_sizes: Vec<i32> = vec![bit_size as i32];
         let ret = unsafe {
-            CoeffModulus_Create(
+            CoeffModulus_Create1(
                 poly_modulus_degree as u64,
                 1,
                 bit_sizes.as_mut_ptr(),
