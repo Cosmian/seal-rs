@@ -55,6 +55,9 @@ namespace SEALNetExamples
                 case SchemeType.CKKS:
                     schemeName = "CKKS";
                     break;
+                case SchemeType.BGV:
+                    schemeName = "BGV";
+                    break;
                 default:
                     throw new ArgumentException("unsupported scheme");
             }
@@ -135,6 +138,10 @@ namespace SEALNetExamples
         public static string ULongToString(ulong value)
         {
             byte[] bytes = BitConverter.GetBytes(value);
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(bytes);
+            }
             return BitConverter.ToString(bytes).Replace("-", "");
         }
 

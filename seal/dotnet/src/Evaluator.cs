@@ -58,7 +58,7 @@ namespace Microsoft.Research.SEAL
     /// </para>
     /// <para>
     /// NTT form
-    /// When using the BFV scheme (SchemeType.BFV), all plaintexts and ciphertexts should remain by default in the usual
+    /// When using the BFV or BGV scheme (SchemeType.BFV or SchemeType.BGV), all plaintexts and ciphertexts should remain by default in the usual
     /// coefficient representation, i.e., not in NTT form. When using the CKKS scheme (SchemeType.CKKS), all plaintexts
     /// and ciphertexts should remain by default in NTT form. We call these scheme-specific NTT states the "default NTT
     /// form". Some functions, such as add, work even if the inputs are not in the default state, but others, such as
@@ -411,6 +411,28 @@ namespace Microsoft.Research.SEAL
         }
 
         /// <summary>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function switches the modulus down to q_1...q_{k-1}.
+        /// </summary>
+        /// <remarks>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function switches the modulus down to q_1...q_{k-1}.
+        /// Dynamic memory allocations in the process are allocated from the memory pool pointed to by the given
+        /// MemoryPoolHandle.
+        /// </remarks>
+        /// <param name="encrypted">The ciphertext to be switched to a smaller modulus</param>
+        /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
+        /// <exception cref="ArgumentNullException">if encrypted is null</exception>
+        /// <exception cref="ArgumentException">if encrypted is not valid for the encryption parameters</exception>
+        /// <exception cref="ArgumentException">if encrypted is not in the default NTT form</exception>
+        /// <exception cref="ArgumentException">if encrypted is already at lowest level</exception>
+        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
+        /// <exception cref="ArgumentException">if pool is uninitialized</exception>
+        /// <exception cref="InvalidOperationException">if result ciphertext is transparent</exception>
+        public void ModSwitchToNextInplace(Ciphertext encrypted, MemoryPoolHandle pool = null)
+        {
+            ModSwitchToNext(encrypted, destination: encrypted, pool: pool);
+        }
+
+        /// <summary>
         /// Given a ciphertext encrypted modulo q_1...q_k, this function switches the modulus down to q_1...q_{k-1} and
         /// stores the result in the destination parameter.
         /// </summary>
@@ -439,64 +461,6 @@ namespace Microsoft.Research.SEAL
             IntPtr poolPtr = pool?.NativePtr ?? IntPtr.Zero;
             NativeMethods.Evaluator_ModSwitchToNext(
                 NativePtr, encrypted.NativePtr, destination.NativePtr, poolPtr);
-        }
-
-        /// <summary>
-        /// Given a ciphertext encrypted modulo q_1...q_k, this function switches the modulus down to q_1...q_{k-1}.
-        /// </summary>
-        /// <remarks>
-        /// Given a ciphertext encrypted modulo q_1...q_k, this function switches the modulus down to q_1...q_{k-1}.
-        /// Dynamic memory allocations in the process are allocated from the memory pool pointed to by the given
-        /// MemoryPoolHandle.
-        /// </remarks>
-        /// <param name="encrypted">The ciphertext to be switched to a smaller modulus</param>
-        /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
-        /// <exception cref="ArgumentNullException">if encrypted is null</exception>
-        /// <exception cref="ArgumentException">if encrypted is not valid for the encryption parameters</exception>
-        /// <exception cref="ArgumentException">if encrypted is not in the default NTT form</exception>
-        /// <exception cref="ArgumentException">if encrypted is already at lowest level</exception>
-        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
-        /// <exception cref="ArgumentException">if pool is uninitialized</exception>
-        /// <exception cref="InvalidOperationException">if result ciphertext is transparent</exception>
-        public void ModSwitchToNextInplace(Ciphertext encrypted, MemoryPoolHandle pool = null)
-        {
-            ModSwitchToNext(encrypted, destination: encrypted, pool: pool);
-        }
-
-        /// <summary>
-        /// Modulus switches an NTT transformed plaintext from modulo q_1...q_k down to modulo q_1...q_{k-1}.
-        /// </summary>
-        /// <param name="plain">The plaintext to be switched to a smaller modulus</param>
-        /// <exception cref="ArgumentNullException">if plain is null</exception>
-        /// <exception cref="ArgumentException">if plain is not in NTT form</exception>
-        /// <exception cref="ArgumentException">if plain is not valid for the encryption parameters</exception>
-        /// <exception cref="ArgumentException">if plain is already at lowest level</exception>
-        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
-        public void ModSwitchToNextInplace(Plaintext plain)
-        {
-            ModSwitchToNext(plain, destination: plain);
-        }
-
-        /// <summary>
-        /// Modulus switches an NTT transformed plaintext from modulo q_1...q_k down to modulo q_1...q_{k-1} and stores
-        /// the result in the destination parameter.
-        /// </summary>
-        /// <param name="plain">The plaintext to be switched to a smaller modulus</param>
-        /// <param name="destination">destination The plaintext to overwrite with the modulus switched result</param>
-        /// <exception cref="ArgumentNullException">if plain, or destination is null</exception>
-        /// <exception cref="ArgumentException">if plain is not in NTT form</exception>
-        /// <exception cref="ArgumentException">if plain is not valid for the encryption parameters</exception>
-        /// <exception cref="ArgumentException">if plain is already at lowest level</exception>
-        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
-        /// <exception cref="ArgumentException">if pool is uninitialized</exception>
-        public void ModSwitchToNext(Plaintext plain, Plaintext destination)
-        {
-            if (null == plain)
-                throw new ArgumentNullException(nameof(plain));
-            if (null == destination)
-                throw new ArgumentNullException(nameof(destination));
-
-            NativeMethods.Evaluator_ModSwitchToNext(NativePtr, plain.NativePtr, destination.NativePtr);
         }
 
         /// <summary>
@@ -559,6 +523,42 @@ namespace Microsoft.Research.SEAL
             IntPtr poolPtr = pool?.NativePtr ?? IntPtr.Zero;
             NativeMethods.Evaluator_ModSwitchTo(
                 NativePtr, encrypted.NativePtr, parmsId.Block, destination.NativePtr, poolPtr);
+        }
+
+        /// <summary>
+        /// Modulus switches an NTT transformed plaintext from modulo q_1...q_k down to modulo q_1...q_{k-1}.
+        /// </summary>
+        /// <param name="plain">The plaintext to be switched to a smaller modulus</param>
+        /// <exception cref="ArgumentNullException">if plain is null</exception>
+        /// <exception cref="ArgumentException">if plain is not in NTT form</exception>
+        /// <exception cref="ArgumentException">if plain is not valid for the encryption parameters</exception>
+        /// <exception cref="ArgumentException">if plain is already at lowest level</exception>
+        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
+        public void ModSwitchToNextInplace(Plaintext plain)
+        {
+            ModSwitchToNext(plain, destination: plain);
+        }
+
+        /// <summary>
+        /// Modulus switches an NTT transformed plaintext from modulo q_1...q_k down to modulo q_1...q_{k-1} and stores
+        /// the result in the destination parameter.
+        /// </summary>
+        /// <param name="plain">The plaintext to be switched to a smaller modulus</param>
+        /// <param name="destination">destination The plaintext to overwrite with the modulus switched result</param>
+        /// <exception cref="ArgumentNullException">if plain, or destination is null</exception>
+        /// <exception cref="ArgumentException">if plain is not in NTT form</exception>
+        /// <exception cref="ArgumentException">if plain is not valid for the encryption parameters</exception>
+        /// <exception cref="ArgumentException">if plain is already at lowest level</exception>
+        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
+        /// <exception cref="ArgumentException">if pool is uninitialized</exception>
+        public void ModSwitchToNext(Plaintext plain, Plaintext destination)
+        {
+            if (null == plain)
+                throw new ArgumentNullException(nameof(plain));
+            if (null == destination)
+                throw new ArgumentNullException(nameof(destination));
+
+            NativeMethods.Evaluator_ModSwitchToNext(NativePtr, plain.NativePtr, destination.NativePtr);
         }
 
         /// <summary>
@@ -725,6 +725,121 @@ namespace Microsoft.Research.SEAL
         }
 
         /// <summary>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function reduces the modulus down to q_1...q_{k-1} and
+        /// stores the result in the destination parameter.
+        /// </summary>
+        /// <remarks>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function reduces the modulus down to q_1...q_{k-1} and
+        /// stores the result in the destination parameter. Dynamic memory allocations in the process are allocated from
+        /// the memory pool pointed to by the given MemoryPoolHandle.
+        /// </remarks>
+        /// <param name="encrypted">The ciphertext to be reduced to a smaller modulus</param>
+        /// <param name="destination">The ciphertext to overwrite with the modular reduced result</param>
+        /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
+        /// <exception cref="ArgumentNullException">if encrypted, or destination is null</exception>
+        /// <exception cref="ArgumentException">if encrypted is not valid for the encryption parameters</exception>
+        /// <exception cref="ArgumentException">if encrypted is not in the default NTT form</exception>
+        /// <exception cref="ArgumentException">if encrypted is already at lowest level</exception>
+        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
+        /// <exception cref="ArgumentException">if pool is uninitialized</exception>
+        /// <exception cref="InvalidOperationException">if result ciphertext is transparent</exception>
+        public void ModReduceToNext(Ciphertext encrypted, Ciphertext destination, MemoryPoolHandle pool = null)
+        {
+            if (null == encrypted)
+                throw new ArgumentNullException(nameof(encrypted));
+            if (null == destination)
+                throw new ArgumentNullException(nameof(destination));
+
+            IntPtr poolPtr = pool?.NativePtr ?? IntPtr.Zero;
+            NativeMethods.Evaluator_ModReduceToNext(
+                NativePtr, encrypted.NativePtr, destination.NativePtr, poolPtr);
+        }
+
+        /// <summary>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function reduces the modulus down to q_1...q_{k-1}.
+        /// </summary>
+        /// <remarks>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function reduces the modulus down to q_1...q_{k-1}.
+        /// Dynamic memory allocations in the process are allocated from the memory pool pointed to by the given
+        /// MemoryPoolHandle.
+        /// </remarks>
+        /// <param name="encrypted">The ciphertext to be reduced to a smaller modulus</param>
+        /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
+        /// <exception cref="ArgumentNullException">if encrypted is null</exception>
+        /// <exception cref="ArgumentException">if encrypted is not valid for the encryption parameters</exception>
+        /// <exception cref="ArgumentException">if encrypted is not in the default NTT form</exception>
+        /// <exception cref="ArgumentException">if encrypted is already at lowest level</exception>
+        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
+        /// <exception cref="ArgumentException">if pool is uninitialized</exception>
+        /// <exception cref="InvalidOperationException">if result ciphertext is transparent</exception>
+        public void ModReduceToNextInplace(Ciphertext encrypted, MemoryPoolHandle pool = null)
+        {
+            ModReduceToNext(encrypted, destination: encrypted, pool: pool);
+        }
+
+        /// <summary>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function reduces the modulus down until the parameters
+        /// reach the given ParmsId and stores the result in the destination parameter.
+        /// </summary>
+        /// <remarks>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function reduces the modulus down until the parameters
+        /// reach the given ParmsId and stores the result in the destination parameter. Dynamic memory allocations in
+        /// the process are allocated from the memory pool pointed to by the given MemoryPoolHandle.
+        /// </remarks>
+        /// <param name="encrypted">The ciphertext to be reduced to a smaller modulus</param>
+        /// <param name="parmsId">The target parmsId</param>
+        /// <param name="destination">The ciphertext to overwrite with the modular reduced result</param>
+        /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
+        /// <exception cref="ArgumentNullException">if encrypted, parmsId, or destination is null</exception>
+        /// <exception cref="ArgumentException">if encrypted is not valid for the encryption parameters</exception>
+        /// <exception cref="ArgumentException">if encrypted is not in the default NTT form</exception>
+        /// <exception cref="ArgumentException">if parmsId is not valid for the encryption parameters</exception>
+        /// <exception cref="ArgumentException">if encrypted is already at lower level in modulus chain than the
+        /// parameters corresponding to parmsId</exception>
+        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
+        /// <exception cref="ArgumentException">if pool is uninitialized</exception>
+        /// <exception cref="InvalidOperationException">if result ciphertext is transparent</exception>
+        public void ModReduceTo(Ciphertext encrypted, ParmsId parmsId, Ciphertext destination, MemoryPoolHandle pool = null)
+        {
+            if (null == encrypted)
+                throw new ArgumentNullException(nameof(encrypted));
+            if (null == parmsId)
+                throw new ArgumentNullException(nameof(parmsId));
+            if (null == destination)
+                throw new ArgumentNullException(nameof(destination));
+
+            IntPtr poolPtr = pool?.NativePtr ?? IntPtr.Zero;
+            NativeMethods.Evaluator_ModReduceTo(
+                NativePtr, encrypted.NativePtr, parmsId.Block, destination.NativePtr, poolPtr);
+        }
+
+        /// <summary>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function reduces the modulus down until the parameters
+        /// reach the given ParmsId.
+        /// </summary>
+        /// <remarks>
+        /// Given a ciphertext encrypted modulo q_1...q_k, this function reduces the modulus down until the parameters
+        /// reach the given ParmsId. Dynamic memory allocations in the process are allocated from the memory pool
+        /// pointed to by the given MemoryPoolHandle.
+        /// </remarks>
+        /// <param name="encrypted">The ciphertext to be reduced to a smaller modulus</param>
+        /// <param name="parmsId">The target parmsId</param>
+        /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
+        /// <exception cref="ArgumentNullException">if encrypted or parmsId is null</exception>
+        /// <exception cref="ArgumentException">if encrypted is not valid for the encryption parameters</exception>
+        /// <exception cref="ArgumentException">if encrypted is not in the default NTT form</exception>
+        /// <exception cref="ArgumentException">if parmsId is not valid for the encryption parameters</exception>
+        /// <exception cref="ArgumentException">if encrypted is already at lower level in modulus chain than the
+        /// parameters corresponding to parmsId</exception>
+        /// <exception cref="ArgumentException">if the scale is too large for the new encryption parameters</exception>
+        /// <exception cref="ArgumentException">if pool is uninitialized</exception>
+        /// <exception cref="InvalidOperationException">if result ciphertext is transparent</exception>
+        public void ModReduceToInplace(Ciphertext encrypted, ParmsId parmsId, MemoryPoolHandle pool = null)
+        {
+            ModReduceTo(encrypted, parmsId, destination: encrypted, pool: pool);
+        }
+
+        /// <summary>
         /// Multiplies several ciphertexts together. This function computes the product of several ciphertext given as
         /// an IEnumerable and stores the result in the destination parameter.
         /// </summary>
@@ -740,7 +855,7 @@ namespace Microsoft.Research.SEAL
         /// <param name="destination">The ciphertext to overwrite with the multiplication result</param>
         /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
         /// <exception cref="ArgumentNullException">if encrypteds, relinKeys, or destination is null</exception>
-        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV</exception>
+        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV or SchemeType.BGV</exception>
         /// <exception cref="ArgumentException">if encrypteds is empty</exception>
         /// <exception cref="ArgumentException">if encrypteds or relinKeys are not valid for the encryption
         /// parameters</exception>
@@ -784,7 +899,7 @@ namespace Microsoft.Research.SEAL
         /// <param name="relinKeys">The relinearization keys</param>
         /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
         /// <exception cref="ArgumentNullException">if encrypted or relinKeys is null</exception>
-        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV</exception>
+        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV or SchemeType.BGV</exception>
         /// <exception cref="ArgumentException">if encrypted or relinKeys is not valid for the encryption
         /// parameters</exception>
         /// <exception cref="ArgumentException">if encrypted is not in the default NTT form</exception>
@@ -816,7 +931,7 @@ namespace Microsoft.Research.SEAL
         /// <param name="relinKeys">The relinearization keys</param>
         /// <param name="destination">The ciphertext to overwrite with the power</param>
         /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
-        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV</exception>
+        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV or SchemeType.BGV</exception>
         /// <exception cref="ArgumentException">if encrypted or relinKeys is not valid for the encryption
         /// parameters</exception>
         /// <exception cref="ArgumentException">if encrypted is not in the default NTT form</exception>
@@ -1148,7 +1263,7 @@ namespace Microsoft.Research.SEAL
         /// The desired Galois automorphism is given as a Galois element, and must be an odd integer in the interval
         /// [1, M-1], where M = 2*N, and N = PolyModulusDegree. Used with batching, a Galois element 3^i % M corresponds
         /// to a cyclic row rotation i steps to the left, and a Galois element 3^(N/2-i) % M corresponds to a cyclic row
-        /// rotation i steps to the right. The Galois element M-1 corresponds to a column rotation (row swap) in BFV,
+        /// rotation i steps to the right. The Galois element M-1 corresponds to a column rotation (row swap) in BFV or BGV,
         /// and complex conjugation in CKKS. In the polynomial view (not batching), a Galois automorphism by a Galois
         /// element p changes Enc(plain(x)) to Enc(plain(x^p)).
         /// </para>
@@ -1188,7 +1303,7 @@ namespace Microsoft.Research.SEAL
         /// The desired Galois automorphism is given as a Galois element, and must be an odd integer in the interval
         /// [1, M-1], where M = 2*N, and N = PolyModulusDegree. Used with batching, a Galois element 3^i % M corresponds
         /// to a cyclic row rotation i steps to the left, and a Galois element 3^(N/2-i) % M corresponds to a cyclic row
-        /// rotation i steps to the right. The Galois element M-1 corresponds to a column rotation (row swap) in BFV,
+        /// rotation i steps to the right. The Galois element M-1 corresponds to a column rotation (row swap) in BFV or BGV,
         /// and complex conjugation in CKKS. In the polynomial view (not batching), a Galois automorphism by a Galois
         /// element p changes Enc(plain(x)) to Enc(plain(x^p)).
         /// </para>
@@ -1232,7 +1347,7 @@ namespace Microsoft.Research.SEAL
         /// Rotates plaintext matrix rows cyclically.
         /// </summary>
         /// <remarks>
-        /// When batching is used with the BFV scheme, this function rotates the encrypted plaintext matrix rows
+        /// When batching is used with the BFV or BGV scheme, this function rotates the encrypted plaintext matrix rows
         /// cyclically to the left (steps &gt; 0) or to the right (steps &lt; 0). Since the size of the batched matrix
         /// is 2-by-(N/2), where N is the degree of the polynomial modulus, the number of steps to rotate must have
         /// absolute value at most N/2-1. Dynamic memory allocations in the process are allocated from the memory pool
@@ -1244,7 +1359,7 @@ namespace Microsoft.Research.SEAL
         /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
         /// <exception cref="ArgumentNullException">if encrypted or galoisKeys is null</exception>
         /// <exception cref="InvalidOperationException">if the encryption parameters do not support batching</exception>
-        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV</exception>
+        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV or SchemeType.BGV</exception>
         /// <exception cref="ArgumentException">if encrypted or galoisKeys is not valid for the encryption
         /// parameters</exception>
         /// <exception cref="ArgumentException">if galoisKeys do not correspond to the top level parameters in the
@@ -1266,7 +1381,7 @@ namespace Microsoft.Research.SEAL
         /// Rotates plaintext matrix rows cyclically.
         /// </summary>
         /// <remarks>
-        /// When batching is used with the BFV scheme, this function rotates the encrypted plaintext matrix rows
+        /// When batching is used with the BFV or BGV scheme, this function rotates the encrypted plaintext matrix rows
         /// cyclically to the left (steps &gt; 0) or to the right (steps &lt; 0) and writes the result to the
         /// destination parameter. Since the size of the batched matrix is 2-by-(N/2), where N is the degree of the
         /// polynomial modulus, the number of steps to rotate must have absolute value at most N/2-1. Dynamic memory
@@ -1279,7 +1394,7 @@ namespace Microsoft.Research.SEAL
         /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
         /// <exception cref="ArgumentNullException">if encrypted, galoisKeys, or destination is null</exception>
         /// <exception cref="InvalidOperationException">if the encryption parameters do not support batching</exception>
-        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV</exception>
+        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV or SchemeType.BGV</exception>
         /// <exception cref="ArgumentException">if encrypted or galoisKeys is not valid for the encryption
         /// parameters</exception>
         /// <exception cref="ArgumentException">if galoisKeys do not correspond to the top level parameters in the
@@ -1313,7 +1428,7 @@ namespace Microsoft.Research.SEAL
         /// Rotates plaintext matrix columns cyclically.
         /// </summary>
         /// <remarks>
-        /// When batching is used with the BFV scheme, this function rotates the encrypted plaintext matrix columns
+        /// When batching is used with the BFV or BGV scheme, this function rotates the encrypted plaintext matrix columns
         /// cyclically. Since the size of the batched matrix is 2-by-(N/2), where N is the degree of the polynomial
         /// modulus, this means simply swapping the two rows. Dynamic memory allocations in the process are allocated
         /// from the memory pool pointed to by the given MemoryPoolHandle.
@@ -1323,7 +1438,7 @@ namespace Microsoft.Research.SEAL
         /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
         /// <exception cref="ArgumentNullException">if encrypted or galoisKeys is null</exception>
         /// <exception cref="InvalidOperationException">if the encryption parameters do not support batching</exception>
-        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV</exception>
+        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV or SchemeType.BGV</exception>
         /// <exception cref="ArgumentException">if encrypted or galoisKeys is not valid for the encryption
         /// parameters</exception>
         /// <exception cref="ArgumentException">if galoisKeys do not correspond to the top level parameters in the
@@ -1343,7 +1458,7 @@ namespace Microsoft.Research.SEAL
         /// Rotates plaintext matrix columns cyclically.
         /// </summary>
         /// <remarks>
-        /// When batching is used with the BFV scheme, this function rotates the encrypted plaintext matrix columns
+        /// When batching is used with the BFV or BGV scheme, this function rotates the encrypted plaintext matrix columns
         /// cyclically, and writes the result to the destination parameter. Since the size of the batched matrix is
         /// 2-by-(N/2), where N is the degree of the polynomial modulus, this means simply swapping the two rows.
         /// Dynamic memory allocations in the process are allocated from the memory pool pointed to by the given
@@ -1355,7 +1470,7 @@ namespace Microsoft.Research.SEAL
         /// <param name="pool">The MemoryPoolHandle pointing to a valid memory pool</param>
         /// <exception cref="ArgumentNullException">if encrypted, galoisKeys, or destination is null</exception>
         /// <exception cref="InvalidOperationException">if the encryption parameters do not support batching</exception>
-        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV</exception>
+        /// <exception cref="InvalidOperationException">if scheme is not SchemeType.BFV or SchemeType.BGV</exception>
         /// <exception cref="ArgumentException">if encrypted or galoisKeys is not valid for the encryption
         /// parameters</exception>
         /// <exception cref="ArgumentException">if galoisKeys do not correspond to the top level parameters in the

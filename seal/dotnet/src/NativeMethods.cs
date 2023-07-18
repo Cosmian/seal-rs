@@ -197,11 +197,19 @@ namespace Microsoft.Research.SEAL
             ref ulong length,
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] coeffArray);
 
-        [DllImport(sealc, PreserveSig = false)]
+        [DllImport(sealc, EntryPoint = "CoeffModulus_Create1", PreserveSig = false)]
         internal static extern void CoeffModulus_Create(
             ulong polyModulusDegree,
             ulong length,
             int[] bitSizes,
+            [MarshalAs(UnmanagedType.LPArray)] IntPtr[] coeffArray);
+
+        [DllImport(sealc, EntryPoint = "CoeffModulus_Create2", PreserveSig = false)]
+        internal static extern void CoeffModulus_Create(
+            ulong polyModulusDegree,
+            ulong length,
+            int[] bitSizes,
+            IntPtr plainModulus,
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] coeffArray);
 
 #endregion
@@ -340,11 +348,11 @@ namespace Microsoft.Research.SEAL
         [DllImport(sealc, EntryPoint = "Evaluator_ModSwitchToNext1", PreserveSig = false)]
         internal static extern void Evaluator_ModSwitchToNext(IntPtr thisptr, IntPtr encrypted, IntPtr destination, IntPtr pool);
 
-        [DllImport(sealc, EntryPoint = "Evaluator_ModSwitchToNext2", PreserveSig = false)]
-        internal static extern void Evaluator_ModSwitchToNext(IntPtr thisptr, IntPtr plain, IntPtr destination);
-
         [DllImport(sealc, EntryPoint = "Evaluator_ModSwitchTo1", PreserveSig = false)]
         internal static extern void Evaluator_ModSwitchTo(IntPtr thisptr, IntPtr encrypted, ulong[] parmsId, IntPtr destination, IntPtr pool);
+
+        [DllImport(sealc, EntryPoint = "Evaluator_ModSwitchToNext2", PreserveSig = false)]
+        internal static extern void Evaluator_ModSwitchToNext(IntPtr thisptr, IntPtr plain, IntPtr destination);
 
         [DllImport(sealc, EntryPoint = "Evaluator_ModSwitchTo2", PreserveSig = false)]
         internal static extern void Evaluator_ModSwitchTo(IntPtr thisptr, IntPtr plain, ulong[] parmsId, IntPtr destination);
@@ -354,6 +362,12 @@ namespace Microsoft.Research.SEAL
 
         [DllImport(sealc, PreserveSig = false)]
         internal static extern void Evaluator_RescaleTo(IntPtr thisptr, IntPtr encrypted, ulong[] parmsId, IntPtr destination, IntPtr pool);
+
+        [DllImport(sealc, EntryPoint = "Evaluator_ModReduceToNext", PreserveSig = false)]
+        internal static extern void Evaluator_ModReduceToNext(IntPtr thisptr, IntPtr encrypted, IntPtr destination, IntPtr pool);
+
+        [DllImport(sealc, EntryPoint = "Evaluator_ModReduceTo", PreserveSig = false)]
+        internal static extern void Evaluator_ModReduceTo(IntPtr thisptr, IntPtr encrypted, ulong[] parmsId, IntPtr destination, IntPtr pool);
 
         [DllImport(sealc, PreserveSig = false)]
         internal static extern void Evaluator_Exponentiate(IntPtr thisptr, IntPtr encrypted, ulong exponent, IntPtr relinKeys, IntPtr destination, IntPtr pool);
@@ -469,6 +483,12 @@ namespace Microsoft.Research.SEAL
 
         [DllImport(sealc, PreserveSig = false)]
         internal static extern void Ciphertext_SetScale(IntPtr thisptr, double scale);
+
+        [DllImport(sealc, PreserveSig = false)]
+        internal static extern void Ciphertext_CorrectionFactor(IntPtr thisptr, out ulong correctionFactor);
+
+        [DllImport(sealc, PreserveSig = false)]
+        internal static extern void Ciphertext_SetCorrectionFactor(IntPtr thisptr, ulong correctionFactor);
 
         [DllImport(sealc, PreserveSig = false)]
         internal static extern void Ciphertext_Release(IntPtr thisptr);

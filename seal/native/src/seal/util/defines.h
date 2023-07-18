@@ -45,7 +45,7 @@ static_assert(sizeof(unsigned long long) == 8, "Require sizeof(unsigned long lon
 #define SEAL_PLAIN_MOD_BIT_COUNT_MIN SEAL_USER_MOD_BIT_COUNT_MIN
 
 // Bounds for number of coefficient moduli (no hard requirement)
-#define SEAL_COEFF_MOD_COUNT_MAX 64
+#define SEAL_COEFF_MOD_COUNT_MAX 256
 #define SEAL_COEFF_MOD_COUNT_MIN 1
 
 // Bounds for polynomial modulus degree (no hard requirement)
@@ -285,4 +285,9 @@ namespace seal
 
 // Conditionally select the former if true and the latter if false
 // This is a temporary solution that generates constant-time code with all compilers on all platforms.
+#ifndef SEAL_AVOID_BRANCHING
 #define SEAL_COND_SELECT(cond, if_true, if_false) (cond ? if_true : if_false)
+#else
+#define SEAL_COND_SELECT(cond, if_true, if_false) \
+    ((if_false) ^ ((~static_cast<uint64_t>(cond) + 1) & ((if_true) ^ (if_false))))
+#endif

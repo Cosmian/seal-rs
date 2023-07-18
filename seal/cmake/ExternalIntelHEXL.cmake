@@ -5,7 +5,7 @@ FetchContent_Declare(
     hexl
     PREFIX hexl
     GIT_REPOSITORY https://github.com/intel/hexl
-    GIT_TAG 0858760 # 1.2.3
+    GIT_TAG f95acf1 # 1.2.5
 )
 FetchContent_GetProperties(hexl)
 
@@ -27,6 +27,7 @@ if(NOT hexl_POPULATED)
 
     add_subdirectory(
         ${hexl_SOURCE_DIR}
+        ${hexl_SOURCE_DIR}/../hexl-build
         EXCLUDE_FROM_ALL
     )
 endif()

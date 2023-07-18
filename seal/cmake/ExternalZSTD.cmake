@@ -4,7 +4,7 @@
 FetchContent_Declare(
     zstd
     GIT_REPOSITORY https://github.com/facebook/zstd.git
-    GIT_TAG        b706286adbba780006a47ef92df0ad7a785666b6 # 1.4.5
+    GIT_TAG        e47e674cd09583ff0503f0f6defd6d23d8b718d3 # 1.5.2
 )
 FetchContent_GetProperties(zstd)
 if(NOT zstd_POPULATED)
@@ -28,5 +28,6 @@ if(NOT zstd_POPULATED)
 
     add_subdirectory(
         ${zstd_SOURCE_DIR}/build/cmake
+        ${zstd_SOURCE_DIR}/../zstd-build
         EXCLUDE_FROM_ALL)
 endif()
