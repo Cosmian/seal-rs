@@ -14,4 +14,4 @@ tracing = "0.1"
 
 [build-dependencies]
 cmake = "0.1"
-bindgen = "0.66"
+bindgen = "0.69"
